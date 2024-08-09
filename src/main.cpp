@@ -7,12 +7,12 @@ Encoders encoders;
 Motors motors;
 Sensors sensors;
 
+
 void setup()
 {
   encoders.begin();
+  encoders.reset();
   motors.begin();
-  delay(50);
-  sensors.begin();
 
   Serial.begin(115200);
 }
@@ -20,6 +20,26 @@ void setup()
 void loop()
 {
   encoders.update();
+for (int i=0;i<30;i++){
+    motors.set_left_motor_percentage(i);
+    motors.set_right_motor_percentage(i);
+    Serial.println(i);
+    delay(100);
+}
+for (int i=0;i<60;i++){
+    motors.set_left_motor_percentage(30-i);
+    motors.set_right_motor_percentage(30-i);
+    Serial.println(30-i);
+    delay(100);
+}
+for (int i=0;i<30;i++){
+    motors.set_left_motor_percentage(i-30);
+    motors.set_right_motor_percentage(i-30);
+    Serial.println(i-30);
+    delay(100);
+}
+
+
   motors.set_left_motor_percentage(100);
   delay(100);
   motors.set_left_motor_percentage(-100);
@@ -45,4 +65,5 @@ void loop()
   Serial.print(gyroY);
   Serial.print("   Gyro Z:  ");
   Serial.println(gyroZ);
+
 }

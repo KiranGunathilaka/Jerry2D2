@@ -35,21 +35,22 @@ const int ToF_XSHUT_Right = 19;
 
 
 const int wheelDiameter = 32; //in mm
-const int gearRatio = 20; //find this
 const int MOUSE_RADIUS = 14;
 const int RADIANS_PER_DEGREE = 3.14/180;
+const float WHEEL_GAP = 108; // distance between the wheels in mm
 
-const int MM_PER_COUNT_LEFT = 20; 
-const int MM_PER_COUNT_RIGHT = 20;
-const int DEG_PER_MM_DIFFERENCE = 0.76;
+const float MM_PER_ROTATION = 103.67; //  pi*wheel diameter .......d=33mm
+const int DEG_PER_MM_DIFFERENCE = 180/(3.14*WHEEL_GAP);
 
 //*********MOTOR CONFIG************************************************** */
 //Left and Right Motor configurations
 const float MAX_MOTOR_PERCENTAGE = 100;
+const int MIN_MOTOR_BIAS = 1;
 const int PWM_RESOLUTION_BITS = 8;
 const int PWM_RESOLUTION = 256; //2^8 use a suitable code to automate this
+const int PULSES_PER_ROTATION = 1430;
 
-const float MOTOR_BALANCE = 0;    //The Percentage fed into the left(add) and right(deduct) motors to math the motor performance 
+const float MOTOR_BALANCE = 5;    //The Percentage fed into the left(add) and right(deduct) motors to math the motor performance 
 const int M_BALNCE_PWM = MAX_MOTOR_PERCENTAGE*PWM_RESOLUTION*MOTOR_BALANCE/100;
 
 

@@ -15,6 +15,7 @@ extern Sensors sensors;
 class Sensors
 {
 public:
+
     void begin()
     {
         Wire.begin(SDA_pin, SCL_pin, 100000); // SDA , SCL
