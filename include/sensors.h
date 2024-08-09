@@ -25,8 +25,8 @@ public:
     {
         pinMode(23, INPUT_PULLUP);
         pinMode(22, INPUT_PULLUP);
-        writeByteGyro(CTRL1_XL, 0x54); // set the accel range to +- 4g
-        writeByteGyro(CTRL2_G, 0x54);  // Set the Gyro range to +- 500 dps
+        writeByteGyro(CTRL1_XL, 0x50); // set the accel range to +- 4g
+        writeByteGyro(CTRL2_G, 0x50);  // Set the Gyro range to +- 500 dps
 
         byte ctrl1 = readByteGyro(CTRL1_XL);
         byte ctrl2 = readByteGyro(CTRL2_G);
@@ -77,6 +77,58 @@ public:
         magDetect = mag.begin();
     }
 
+    // VL530LX readings
+    float *getToFReadings()
+    {
+        tofArr[0] = sensor1.readRangeSingleMillimeters();
+        tofArr[1] = sensor2.readRangeSingleMillimeters();
+        tofArr[2] = sensor3.readRangeSingleMillimeters();
+
+        return tofArr;
+    }
+
+    // getting LSM6DS3 readings
+    float *getGyroReadings()
+    {
+        int16_t gx = readWord(OUTX_L_G);
+        int16_t gy = readWord(OUTX_L_G + 2);
+        int16_t gz = readWord(OUTX_L_G + 4);
+
+        gyroArr[0] = gx * 0.0175f; // Convert to dps
+        gyroArr[1] = gy * 0.0175f;
+        gyroArr[2] = gz * 0.0175f;
+
+        return gyroArr;
+    }
+
+    float *getAccelReadings()
+    {
+        int16_t ax = readWord(OUTX_L_XL);
+        int16_t ay = readWord(OUTX_L_XL + 2);
+        int16_t az = readWord(OUTX_L_XL + 4);
+
+        accelArr[0] = ax * 0.122f / 1000.0f; // Convert to g
+        accelArr[1] = ay * 0.122f / 1000.0f;
+        accelArr[2] = az * 0.122f / 1000.0f;
+
+        return accelArr;
+    }
+
+    // GY-271 readings
+    float *getMagReadings()
+    {
+        if (magDetect) {
+            sensors_event_t event;
+            mag.getEvent(&event);
+
+            magArr[0] = event.magnetic.x;
+            magArr[1] = event.magnetic.y;
+            magArr[2] = event.magnetic.z;
+        }
+
+        return magArr;
+    }
+
     void writeByteGyro(uint8_t reg, uint8_t value)
     {
         Wire.beginTransmission(LSM6DS3_ADDRESS);
@@ -112,4 +164,8 @@ private:
     Adafruit_HMC5883_Unified mag = Adafruit_HMC5883_Unified(12345);
 
     bool magDetect = false;
+    float tofArr[3] = {0.0, 0.0, 0.0};
+    float gyroArr[3] = {0.0, 0.0, 0.0};
+    float accelArr[3] = {0.0, 0.0, 0.0};
+    float magArr[3] = {0.0, 0.0, 0.0};
 };
