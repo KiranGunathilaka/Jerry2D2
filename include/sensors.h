@@ -2,17 +2,11 @@
 
 #include <Arduino.h>
 #include <config.h>
+#include <Wire.h>
 
 #include <VL53L0X.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_HMC5883_U.h>
-
-#define LSM6DS3_ADDRESS 0x6B // I2C address of LSM6DS3
-
-#define CTRL1_XL 0x10  // Accelerometer control register
-#define CTRL2_G 0x11   // Gyroscope control register
-#define OUTX_L_G 0x22  // First gyro data register
-#define OUTX_L_XL 0x28 // First accel data register
 
 class Sensors;
 
@@ -23,6 +17,8 @@ class Sensors
 public:
     void begin()
     {
+        Wire.begin(SDA_pin, SCL_pin, 100000); // SDA , SCL
+
         pinMode(23, INPUT_PULLUP);
         pinMode(22, INPUT_PULLUP);
         writeByteGyro(CTRL1_XL, 0x50); // set the accel range to +- 4g
@@ -40,34 +36,28 @@ public:
         digitalWrite(ToF_XSHUT_Center, LOW);
         digitalWrite(ToF_XSHUT_Right, LOW);
 
-        Wire.begin(SDA_pin, SCL_pin); // SDA , SCL
-        Wire.setClock(100000);
+        Serial.begin(115200);
 
         // changing address of 1st tof
-        digitalWrite(5, HIGH);
+        digitalWrite(ToF_XSHUT_Left, HIGH);
         delay(30);
         sensor1.init(true);
-        Serial.println("01");
         delay(30);
         sensor1.setAddress(TOF_LEFT_ADD);
 
         // changing address of 2nd tof
-        digitalWrite(18, HIGH);
+        digitalWrite(ToF_XSHUT_Center, HIGH);
         delay(30);
         sensor2.init(true);
-        Serial.println("02");
         delay(30);
         sensor2.setAddress(TOF_CENTER_ADD);
 
         // changing address of 3rd tof
-        digitalWrite(19, HIGH);
+        digitalWrite(ToF_XSHUT_Right, HIGH);
         delay(30);
         sensor3.init(true);
-        Serial.println("03");
         delay(30);
         sensor3.setAddress(TOF_RIGH_ADD);
-
-        Serial.println("ToF addresses set");
 
         sensor1.startContinuous();
         sensor2.startContinuous();
@@ -90,26 +80,19 @@ public:
     // getting LSM6DS3 readings
     float *getGyroReadings()
     {
-        int16_t gx = readWord(OUTX_L_G);
-        int16_t gy = readWord(OUTX_L_G + 2);
-        int16_t gz = readWord(OUTX_L_G + 4);
-
-        gyroArr[0] = gx * 0.0175f; // Convert to dps
-        gyroArr[1] = gy * 0.0175f;
-        gyroArr[2] = gz * 0.0175f;
+        gyroArr[0] = (float)readWord(OUTX_L_G) * 0.0175; // Convert to dps
+        gyroArr[1] = (float)readWord(OUTX_L_G + 2) * 0.0175;
+        gyroArr[2] = (float)readWord(OUTX_L_G + 4) * 0.0175;
 
         return gyroArr;
     }
 
     float *getAccelReadings()
     {
-        int16_t ax = readWord(OUTX_L_XL);
-        int16_t ay = readWord(OUTX_L_XL + 2);
-        int16_t az = readWord(OUTX_L_XL + 4);
 
-        accelArr[0] = ax * 0.122f / 1000.0f; // Convert to g
-        accelArr[1] = ay * 0.122f / 1000.0f;
-        accelArr[2] = az * 0.122f / 1000.0f;
+        accelArr[0] = (float)readWord(OUTX_L_XL) * 0.000122; // Convert to g
+        accelArr[1] = (float)readWord(OUTX_L_XL) * 0.000122;
+        accelArr[2] = (float)readWord(OUTX_L_XL) * 0.000122;
 
         return accelArr;
     }
@@ -117,7 +100,8 @@ public:
     // GY-271 readings
     float *getMagReadings()
     {
-        if (magDetect) {
+        if (magDetect)
+        {
             sensors_event_t event;
             mag.getEvent(&event);
 
@@ -143,7 +127,8 @@ public:
         Wire.write(reg);
         Wire.endTransmission(false);
         Wire.requestFrom(LSM6DS3_ADDRESS, 1);
-        return Wire.read();
+        int16_t num = Wire.read();
+        return num;
     }
 
     int16_t readWord(uint8_t reg)
@@ -152,13 +137,13 @@ public:
         Wire.write(reg);
         Wire.endTransmission(false);
         Wire.requestFrom(LSM6DS3_ADDRESS, 2);
-        return (Wire.read() | Wire.read() << 8);
+        int16_t num = (Wire.read() | Wire.read() << 8);
+        return num;
     }
 
 private:
     // TOF
     VL53L0X sensor1, sensor2, sensor3;
-    int a, b, c, d;
 
     // Magnetometer
     Adafruit_HMC5883_Unified mag = Adafruit_HMC5883_Unified(12345);
