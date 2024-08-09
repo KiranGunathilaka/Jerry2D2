@@ -25,6 +25,7 @@ public:
         attachInterrupt(digitalPinToInterrupt(RightEncoderPin1), updateRightEncoderISR, CHANGE);
         attachInterrupt(digitalPinToInterrupt(RightEncoderPin2), updateRightEncoderISR, CHANGE);
     }
+    
 
     void reset()
     {
@@ -34,7 +35,7 @@ public:
         encoderCounterRight = 0;
         robot_distance = 0;
         robot_angle = 0;
-        time = 0;
+        time = millis();
 
         interrupts();
     }
@@ -96,9 +97,14 @@ public:
 
     void update()
     {
+        unsigned long currentTime = millis();
 
         int left_delta = 0;
         int right_delta = 0;
+        time_change = currentTime - time;
+
+        time = currentTime;
+
         // Make sure values don't change while being read. Be quick.
         noInterrupts();
         left_delta = encoderCounterLeft;
@@ -109,44 +115,57 @@ public:
 
         float left_change = left_delta * MM_PER_COUNT_LEFT;
         float right_change = right_delta * MM_PER_COUNT_RIGHT;
-        fwd_change = 0.5 * (right_change + left_change);
+        fwd_change = 0.5 * (right_change + left_change); // taking average, distance in millimeters
         robot_distance += fwd_change;
         rot_change = (right_change - left_change) * DEG_PER_MM_DIFFERENCE;
         robot_angle += rot_change;
     }
 
-    float robotDistance()
+    
+    inline float robotDistance()
     {
         float distance;
-
         noInterrupts();
-        distance = robot_distance;
+        distance = robot_distance; //in mm
         interrupts();
-
         return distance;
     }
 
-    float robotAngle()
+    inline float robotAngle()
     {
         float angle;
-
         noInterrupts();
         angle = robot_angle;
         interrupts();
-
         return angle;
     }
 
-    float robot_fwd_change()
+    inline float robot_speed(){
+        float speed ;
+        noInterrupts();
+        speed = fwd_change / time_change ;
+        interrupts();
+        return speed;
+    }
+
+    inline float robot_omega(){
+        float omega;
+        noInterrupts();
+        omega = rot_change / time_change;
+        interrupts();
+        return omega;
+    }
+
+    inline float robot_fwd_change()
     {
         float distance;
-        interrupts();
-        distance = fwd_change;
         noInterrupts();
+        distance = fwd_change;
+        interrupts();
         return distance;
     }
 
-    float robot_rot_change()
+    inline float robot_rot_change()
     {
         float distance;
         noInterrupts();
@@ -155,17 +174,60 @@ public:
         return distance;
     }
 
+    inline int counterLeft(){
+        int count;
+
+        noInterrupts();
+        count = encoderCounterLeft;
+        interrupts();
+
+        return count;
+    }
+
+    inline int counterRight(){
+        int count;
+
+        noInterrupts();
+        count = encoderCounterRight;
+        interrupts();
+
+        return count;
+    }
+
+    inline int leftRPS(){
+        int rps;
+
+        noInterrupts();
+        rps = encoderCounterLeft / time_change;
+        interrupts();
+
+        return rps;
+    }
+
+    inline int rightRPS(){
+        int rps;
+
+        noInterrupts();
+        rps = encoderCounterRight / time_change;
+        interrupts();
+
+        return rps;
+    }
+
+
 private:
-    volatile int encoderCounterLeft; // Encoder position
+    volatile int encoderCounterLeft; // Encoder roatation count, this gets reset every time we call update
     volatile int lastEncodedLeft;    // Last encoded value
 
-    volatile int encoderCounterRight;
+    volatile int encoderCounterRight;// Encoder roatation count, this gets reset every time we call update
     volatile int lastEncodedRight;
 
-    volatile float robot_distance;
-    volatile float robot_angle;
-    volatile float time;
+    volatile float robot_distance; // the complete distance travel by robot, this get's incremented using the update function
+    volatile float robot_angle; // same like above
+
+    unsigned long time;
     // the change in distance or angle in the last tick.
-    float fwd_change;
+    float fwd_change; //difference 
     float rot_change;
+    int time_change;
 };
