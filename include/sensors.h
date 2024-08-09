@@ -77,8 +77,6 @@ public:
         magDetect = mag.begin();
     }
 
-    
-
     void writeByteGyro(uint8_t reg, uint8_t value)
     {
         Wire.beginTransmission(LSM6DS3_ADDRESS);
