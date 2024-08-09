@@ -20,6 +20,13 @@ const int ToF_XSHUT_Center =18;
 const int ToF_XSHUT_Right = 19;
 
 
+
+#define LSM6DS3_ADDRESS 0x6B // I2C address of LSM6DS3
+
+#define CTRL1_XL 0x10  // Accelerometer control register
+#define CTRL2_G 0x11   // Gyroscope control register
+#define OUTX_L_G 0x22  // First gyro data register
+#define OUTX_L_XL 0x28 // First accel data register
 //custom i2c addresses
 
 #define TOF_LEFT_ADD 0x30
