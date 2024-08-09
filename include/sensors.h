@@ -21,6 +21,7 @@ extern Sensors sensors;
 class Sensors
 {
 public:
+
     void begin()
     {
         pinMode(23, INPUT_PULLUP);

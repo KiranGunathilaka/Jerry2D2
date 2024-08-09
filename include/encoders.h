@@ -13,7 +13,7 @@ class Encoders
 public:
     void begin()
     {
-        pinMode(LeftEncoderPin1, INPUT_PULLUP);
+        pinMode(LeftEncoderPin1, INPUT_PULLUP);// can speed up gpio readtime by using gpio config(driver/gpio.h)
         pinMode(LeftEncoderPin2, INPUT_PULLUP);
 
         pinMode(RightEncoderPin1, INPUT_PULLUP);
@@ -35,7 +35,10 @@ public:
         encoderCounterRight = 0;
         robot_distance = 0;
         robot_angle = 0;
-        time = millis();
+        //prevTime = micros();
+        //time_change_3 = 0;
+        //time_change_2 = 0;
+        //time_change_3 = 1;
 
         interrupts();
     }
@@ -63,11 +66,11 @@ public:
         // Update position based on the transition
         if (sum == 0b1101 || sum == 0b0100 || sum == 0b0010 || sum == 0b1011)
         {
-            encoderCounterLeft++;
+            encoderCounterLeft--;
         }
         else if (sum == 0b1110 || sum == 0b0111 || sum == 0b0001 || sum == 0b1000)
         {
-            encoderCounterLeft--;
+            encoderCounterLeft++;
         }
 
         lastEncodedLeft = encoded; // Save the current state
@@ -85,11 +88,11 @@ public:
         // Update position based on the transition
         if (sum == 0b1101 || sum == 0b0100 || sum == 0b0010 || sum == 0b1011)
         {
-            encoderCounterRight++;
+            encoderCounterRight--;
         }
         else if (sum == 0b1110 || sum == 0b0111 || sum == 0b0001 || sum == 0b1000)
         {
-            encoderCounterRight--;
+            encoderCounterRight++;
         }
 
         lastEncodedRight = encoded; // Save the current state
@@ -97,13 +100,20 @@ public:
 
     void update()
     {
-        unsigned long currentTime = millis();
+        unsigned long currentTime = micros();
 
-        int left_delta = 0;
-        int right_delta = 0;
-        time_change = currentTime - time;
+        left_delta = 0;
+        right_delta = 0;
+        
+       // time_change_2 = time_change_1;
+        time_change_1 = prevTime;
+        time_change_u = currentTime-prevTime;// (time_change_1+time_change_2)/2;
+        if (time_change_u==0){
+            time_change_u = 1;
+        }
+    
 
-        time = currentTime;
+        prevTime = currentTime;
 
         // Make sure values don't change while being read. Be quick.
         noInterrupts();
@@ -113,14 +123,17 @@ public:
         encoderCounterRight = 0;
         interrupts();
 
-        float left_change = left_delta * MM_PER_COUNT_LEFT;
-        float right_change = right_delta * MM_PER_COUNT_RIGHT;
+        float left_change = (float)left_delta * MM_PER_ROTATION/ PULSES_PER_ROTATION;
+        float right_change = (float)right_delta * MM_PER_ROTATION/ PULSES_PER_ROTATION;
         fwd_change = 0.5 * (right_change + left_change); // taking average, distance in millimeters
         robot_distance += fwd_change;
         rot_change = (right_change - left_change) * DEG_PER_MM_DIFFERENCE;
         robot_angle += rot_change;
     }
-
+    inline int loopTime_us(){
+        int looptime = time_change_u;
+        return looptime;
+    }
     
     inline float robotDistance()
     {
@@ -143,7 +156,7 @@ public:
     inline float robot_speed(){
         float speed ;
         noInterrupts();
-        speed = fwd_change / time_change ;
+        speed = fwd_change / time_change_u ;
         interrupts();
         return speed;
     }
@@ -151,7 +164,7 @@ public:
     inline float robot_omega(){
         float omega;
         noInterrupts();
-        omega = rot_change / time_change;
+        omega = rot_change / time_change_u;
         interrupts();
         return omega;
     }
@@ -174,21 +187,21 @@ public:
         return distance;
     }
 
-    inline int counterLeft(){
+    inline int leftDelta(){
         int count;
 
         noInterrupts();
-        count = encoderCounterLeft;
+        count = left_delta;
         interrupts();
 
         return count;
     }
 
-    inline int counterRight(){
+    inline int rightDelta(){
         int count;
 
         noInterrupts();
-        count = encoderCounterRight;
+        count = right_delta;
         interrupts();
 
         return count;
@@ -198,7 +211,7 @@ public:
         int rps;
 
         noInterrupts();
-        rps = encoderCounterLeft / time_change;
+        rps = left_delta*1000000/time_change_u; //encoderCounterLeft * 
         interrupts();
 
         return rps;
@@ -208,7 +221,7 @@ public:
         int rps;
 
         noInterrupts();
-        rps = encoderCounterRight / time_change;
+        rps = right_delta*1000000/time_change_u; 
         interrupts();
 
         return rps;
@@ -219,15 +232,21 @@ private:
     volatile int encoderCounterLeft; // Encoder roatation count, this gets reset every time we call update
     volatile int lastEncodedLeft;    // Last encoded value
 
+    int left_delta; //this variable holds the number of encoder counts during two update calls
+    int right_delta ;
+
     volatile int encoderCounterRight;// Encoder roatation count, this gets reset every time we call update
     volatile int lastEncodedRight;
 
     volatile float robot_distance; // the complete distance travel by robot, this get's incremented using the update function
     volatile float robot_angle; // same like above
 
-    unsigned long time;
+    unsigned long prevTime;
     // the change in distance or angle in the last tick.
     float fwd_change; //difference 
     float rot_change;
-    int time_change;
+    float time_change_u;
+    int time_change_1;
+    int time_change_2;
+    int time_change_3;
 };
