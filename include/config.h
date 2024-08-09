@@ -39,7 +39,12 @@ const int DEG_PER_MM_DIFFERENCE = 0.76;
 //*********MOTOR CONFIG************************************************** */
 //Left and Right Motor configurations
 const float MAX_MOTOR_PERCENTAGE = 100;
-const float PWM_RESOLUTION = 8;
+const int PWM_RESOLUTION_BITS = 8;
+const int PWM_RESOLUTION = 256; //2^8 use a suitable code to automate this
+
+const float MOTOR_BALANCE = 0;    //The Percentage fed into the left(add) and right(deduct) motors to math the motor performance 
+const int M_BALNCE_PWM = MAX_MOTOR_PERCENTAGE*PWM_RESOLUTION*MOTOR_BALANCE/100;
+
 
 const int LEFT_MOTOR_PWM = 25;   //left is motor A
 const int LEFT_MOTOR_IN1 = 26;
