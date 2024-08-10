@@ -45,7 +45,7 @@ const float scaleX = 46.44;  //for more detyails see the calibaration code on th
 const float centerOffsetX = 20.91;
 const float centerOffsetY = -2.08;
 
-
+//**************************************************MOUSE CONFIG**************************************************************************
 const int wheelDiameter = 32; //in mm
 const int MOUSE_RADIUS = 14;
 const int RADIANS_PER_DEGREE = 3.14/180;
@@ -53,8 +53,13 @@ const float WHEEL_GAP = 108; // distance between the wheels in mm
 
 const float MM_PER_ROTATION = 103.67; //  pi*wheel diameter .......d=33mm
 const int DEG_PER_MM_DIFFERENCE = 180/(3.14*WHEEL_GAP);
-
-//*********MOTOR CONFIG************************************************** */
+//*****************************************************COMMUNICATIONS************************************************************************
+const char* SSID ="Chocolate";
+const char* WIFI_PASSWORD = "Pissu69pusa";
+const char* HOST_IP = "192.168.8.131"; //IP of host computer
+const int HOST_PORT = 1234;  // Port number on the PC
+const bool WIFI_ENABLE = true;
+//***************************************************MOTOR CONFIG***************************************************************************/
 //Left and Right Motor configurations
 const float MAX_MOTOR_PERCENTAGE = 100;
 const int MIN_MOTOR_BIAS = 1;
