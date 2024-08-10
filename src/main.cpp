@@ -7,7 +7,6 @@
 Encoders encoders;
 Motors motors;
 Sensors sensors;
-
 Communication communication;
 
 
@@ -25,8 +24,8 @@ void setup()
 void loop()
 {
   encoders.update();
-
   sensors.update();
+
   // for (int i = 0; i < 30; i++)
   // {
   //   motors.set_left_motor_percentage(i);
@@ -63,14 +62,11 @@ void loop()
   // Serial.print("    Right   :  ");
   // Serial.println(encoders.rightRPS());
 
-  communication.send("Distance   :  ");
-  communication.send(String(encoders.robotDistance()));
-  communication.send("    Angle   :  ");
-  communication.send(String(encoders.robotAngle()));
-  communication.send("    Left Rps  :  ");
-  communication.send(String(encoders.leftRPS()));
-  communication.send("    Right Rps  :  ");
-  communication.send(String(encoders.rightRPS()));
+ 
+  communication.send("Distance:"+String(encoders.robotDistance()));
+  communication.send("Angle:"+String(encoders.robotAngle()));
+  communication.send("Left RPS:"+String(encoders.leftRPS()));
+  communication.send("Right RPS:"+String(encoders.rightRPS()));
 
   float *gyroData = sensors.getGyroReadings();
 
@@ -78,12 +74,9 @@ void loop()
   float gyroY = gyroData[1];
   float gyroZ = gyroData[2];
 
-  communication.send("Gyro X: ");
-  communication.send(String(gyroX));
-  communication.send("   Gyro Y:  ");
-  communication.send(String(gyroY));
-  communication.send("   Gyro Z:  ");
-  communication.send(String(gyroZ));
+  communication.send("Gyro X:"+String(gyroX));
+  communication.send("Gyro Y:"+String(gyroY));
+  communication.send("Gyro Z:"+String(gyroZ));
 
 
   float* tofData = sensors.getToFReadings();
@@ -91,15 +84,14 @@ void loop()
   float tofCenter = tofData[1];
   float tofLeft = tofData[2];
 
-  communication.send("ToF Right : ");
-  communication.send(tofRight);
-  communication.send("ToF Center: ");
-  communication.send(tofCenter);
-  communication.send("ToF Left  :  ");
-  communication.send(tofLeft);
+  communication.send("ToF Right:"+String(tofRight));
+  communication.send("ToF Center:"+String(tofCenter));
+  communication.send("ToF Left:"+String(tofLeft));
 
   float direction = sensors.getMagReadings();
-  Serial.println(direction);
+
+  communication.send("Direction:"+String(direction));
+  communication.send(String('/'));
   delay(100);
 
 }

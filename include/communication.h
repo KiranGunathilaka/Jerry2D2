@@ -33,7 +33,7 @@ class Communication {
     void send(String data){
           Serial.println(String(data));
           udp.beginPacket(HOST_IP, HOST_PORT);
-          udp.print("/"+String(data));
+          udp.print(String(data));
           udp.endPacket();
     }
 
