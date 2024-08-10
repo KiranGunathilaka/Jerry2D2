@@ -2,68 +2,70 @@
 #include "encoders.h"
 #include "motors.h"
 #include "sensors.h"
+#include "communication.h"
 
 Encoders encoders;
 Motors motors;
 Sensors sensors;
-
+Communication communication;
 
 void setup()
 {
   encoders.begin();
   encoders.reset();
   motors.begin();
-
   Serial.begin(115200);
+  communication.begin();
 }
 
 void loop()
 {
   encoders.update();
-for (int i=0;i<30;i++){
-    motors.set_left_motor_percentage(i);
-    motors.set_right_motor_percentage(i);
-    Serial.println(i);
-    delay(100);
-}
-for (int i=0;i<60;i++){
-    motors.set_left_motor_percentage(30-i);
-    motors.set_right_motor_percentage(30-i);
-    Serial.println(30-i);
-    delay(100);
-}
-for (int i=0;i<30;i++){
-    motors.set_left_motor_percentage(i-30);
-    motors.set_right_motor_percentage(i-30);
-    Serial.println(i-30);
-    delay(100);
-}
-
+  // for (int i = 0; i < 30; i++)
+  // {
+  //   motors.set_left_motor_percentage(i);
+  //   motors.set_right_motor_percentage(i);
+  //   Serial.println(i);
+  //   delay(100);
+  // }
+  // for (int i = 0; i < 60; i++)
+  // {
+  //   motors.set_left_motor_percentage(30 - i);
+  //   motors.set_right_motor_percentage(30 - i);
+  //   Serial.println(30 - i);
+  //   delay(100);
+  // }
+  // for (int i = 0; i < 30; i++)
+  // {
+  //   motors.set_left_motor_percentage(i - 30);
+  //   motors.set_right_motor_percentage(i - 30);
+  //   Serial.println(i - 30);
+  //   delay(100);
+  // }
 
   motors.set_left_motor_percentage(100);
   delay(100);
   motors.set_left_motor_percentage(-100);
 
-  Serial.print("Distance   :  ");
-  Serial.print(encoders.robotDistance());
-  Serial.print("    Angle   :  ");
-  Serial.print(encoders.robotAngle());
-  Serial.print("    Left   :  ");
-  Serial.print(encoders.counterLeft());
-  Serial.print("    Right   :  ");
-  Serial.println(encoders.counterRight());
+  communication.send("Distance   :  ");
+  communication.send(String(encoders.robotDistance()));
+  communication.send("    Angle   :  ");
+  communication.send(String(encoders.robotAngle()));
+  communication.send("    Left Rps  :  ");
+  communication.send(String(encoders.leftRPS()));
+  communication.send("    Right Rps  :  ");
+  communication.send(String(encoders.rightRPS()));
 
-  float* gyroData = sensors.getGyroReadings();
+  float *gyroData = sensors.getGyroReadings();
 
   float gyroX = gyroData[0];
   float gyroY = gyroData[1];
   float gyroZ = gyroData[2];
 
-  Serial.print("Gyro X: ");
-  Serial.print(gyroX);
-  Serial.print("   Gyro Y:  ");
-  Serial.print(gyroY);
-  Serial.print("   Gyro Z:  ");
-  Serial.println(gyroZ);
-
+  communication.send("Gyro X: ");
+  communication.send(String(gyroX));
+  communication.send("   Gyro Y:  ");
+  communication.send(String(gyroY));
+  communication.send("   Gyro Z:  ");
+  communication.send(String(gyroZ));
 }
