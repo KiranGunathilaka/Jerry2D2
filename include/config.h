@@ -52,7 +52,7 @@ const int RADIANS_PER_DEGREE = 3.14/180;
 const float WHEEL_GAP = 108; // distance between the wheels in mm
 
 const float MM_PER_ROTATION = 103.67; //  pi*wheel diameter .......d=33mm
-const int DEG_PER_MM_DIFFERENCE = 180/(3.14*WHEEL_GAP);
+const float DEG_PER_MM_DIFFERENCE = 180.0/(3.14*WHEEL_GAP);
 //*****************************************************COMMUNICATIONS************************************************************************
 const char* SSID ="Chocolate";
 const char* WIFI_PASSWORD = "Pissu69pusa";
@@ -61,14 +61,14 @@ const int HOST_PORT = 1234;  // Port number on the PC
 const bool WIFI_ENABLE = true;
 //***************************************************MOTOR CONFIG***************************************************************************/
 //Left and Right Motor configurations
-const float MAX_MOTOR_PERCENTAGE = 100;
-const int MIN_MOTOR_BIAS = 1;
+const float MAX_MOTOR_PERCENTAGE = 90;
+const int MIN_MOTOR_BIAS = 10;
 const int PWM_RESOLUTION_BITS = 8;
 const int PWM_RESOLUTION = 256; //2^8 use a suitable code to automate this
 const int PULSES_PER_ROTATION = 1430;
 
-const float MOTOR_BALANCE = 5;    //The Percentage fed into the left(add) and right(deduct) motors to math the motor performance 
-const int M_BALNCE_PWM = MAX_MOTOR_PERCENTAGE*PWM_RESOLUTION*MOTOR_BALANCE/100;
+const float MOTOR_BALANCE = 0;    //The Percentage fed into the left(add) and right(deduct) motors to math the motor performance 
+const int M_BALNCE_PWM = MAX_MOTOR_PERCENTAGE*PWM_RESOLUTION*MOTOR_BALANCE/10000;
 
 
 const int LEFT_MOTOR_PWM = 25;   //left is motor A

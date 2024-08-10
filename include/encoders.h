@@ -3,6 +3,7 @@
 #include <Arduino.h>
 #include <stdint.h>
 #include "config.h"
+#include <math.h>
 
 class Encoders;
 
@@ -127,11 +128,17 @@ public:
 
         float left_change = (float)left_delta * MM_PER_ROTATION/ PULSES_PER_ROTATION;
         float right_change = (float)right_delta * MM_PER_ROTATION/ PULSES_PER_ROTATION;
+        // Serial.print(left_delta);
+        // Serial.print('|');
+        // Serial.print(left_change);
+        // Serial.print(' ');
+
         fwd_change = 0.5 * (right_change + left_change); // taking average, distance in millimeters
         robot_distance += fwd_change;
         rot_change = (right_change - left_change) * DEG_PER_MM_DIFFERENCE;
         robot_angle += rot_change;
     }
+
     inline int loopTime_us(){
         int looptime = time_change_u;
         return looptime;
@@ -158,15 +165,15 @@ public:
     inline float robot_speed(){
         float speed ;
         noInterrupts();
-        speed = fwd_change * 1000000/ time_change_u ;
+        speed = (fwd_change/ time_change_u)* 1000000;
         interrupts();
         return speed;
     }
 
-    inline float robot_omega(){
+    inline float robot_omega(){   /////given in degrees per second!!!!!
         float omega;
         noInterrupts();
-        omega = rot_change * 1000000/ time_change_u;
+        omega = (rot_change/time_change_u)* 1000000;
         interrupts();
         return omega;
     }
@@ -193,7 +200,7 @@ public:
         int rps;
 
         noInterrupts();
-        rps = left_delta*1000000/time_change_u; //encoderCounterLeft * 
+        rps = (left_delta/time_change_u)*1000000; //encoderCounterLeft * 
         interrupts();
 
         return rps;
@@ -203,7 +210,7 @@ public:
         int rps;
 
         noInterrupts();
-        rps = right_delta*1000000/time_change_u; 
+        rps = (right_delta/time_change_u)*1000000; 
         interrupts();
 
         return rps;
@@ -211,14 +218,14 @@ public:
 
 
 private:
-    volatile int encoderCounterLeft; // Encoder roatation count, this gets reset every time we call update
-    volatile int lastEncodedLeft;    // Last encoded value
+    volatile long encoderCounterLeft; // Encoder roatation count, this gets reset every time we call update
+    volatile long lastEncodedLeft;    // Last encoded value
 
     int left_delta; //this variable holds the number of encoder counts during two update calls
     int right_delta ;
 
-    volatile int encoderCounterRight;// Encoder roatation count, this gets reset every time we call update
-    volatile int lastEncodedRight;
+    volatile long encoderCounterRight;// Encoder roatation count, this gets reset every time we call update
+    volatile long lastEncodedRight;
 
     volatile float robot_distance; // the complete distance travel by robot, this get's incremented using the update function
     volatile float robot_angle; // same like above
