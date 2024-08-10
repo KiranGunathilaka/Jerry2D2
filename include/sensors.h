@@ -15,7 +15,6 @@ extern Sensors sensors;
 class Sensors
 {
 public:
-
     void begin()
     {
         Wire.begin(SDA_pin, SCL_pin, 100000); // SDA , SCL
@@ -29,89 +28,113 @@ public:
         byte ctrl2 = readByteGyro(CTRL2_G);
 
         // ToF address change
-        pinMode(ToF_XSHUT_Left, OUTPUT);
-        pinMode(ToF_XSHUT_Center, OUTPUT);
         pinMode(ToF_XSHUT_Right, OUTPUT);
+        pinMode(ToF_XSHUT_Center, OUTPUT);
+        pinMode(ToF_XSHUT_Left, OUTPUT);
 
-        digitalWrite(ToF_XSHUT_Left, LOW);
-        digitalWrite(ToF_XSHUT_Center, LOW);
         digitalWrite(ToF_XSHUT_Right, LOW);
+        digitalWrite(ToF_XSHUT_Center, LOW);
+        digitalWrite(ToF_XSHUT_Left, LOW);
 
         Serial.begin(115200);
 
         // changing address of 1st tof
-        digitalWrite(ToF_XSHUT_Left, HIGH);
+        digitalWrite(ToF_XSHUT_Right, HIGH);
         delay(30);
-        sensor1.init(true);
+        tofRight.init(true);
         delay(30);
-        sensor1.setAddress(TOF_LEFT_ADD);
+        tofRight.setAddress(TOF_RIGHT_ADD);
 
         // changing address of 2nd tof
         digitalWrite(ToF_XSHUT_Center, HIGH);
         delay(30);
-        sensor2.init(true);
+        tofCenter.init(true);
         delay(30);
-        sensor2.setAddress(TOF_CENTER_ADD);
+        tofCenter.setAddress(TOF_CENTER_ADD);
 
         // changing address of 3rd tof
-        digitalWrite(ToF_XSHUT_Right, HIGH);
+        digitalWrite(ToF_XSHUT_Left, HIGH);
         delay(30);
-        sensor3.init(true);
+        tofLeft.init(true);
         delay(30);
-        sensor3.setAddress(TOF_RIGH_ADD);
+        tofLeft.setAddress(TOF_LEFT_ADD);
 
-        sensor1.startContinuous();
-        sensor2.startContinuous();
-        sensor3.startContinuous();
+        tofRight.startContinuous();
+        tofCenter.startContinuous();
+        tofLeft.startContinuous();
 
         // Magnetometer initialization
         magDetect = mag.begin();
     }
 
-    // VL530LX readings
-    float *getToFReadings()
+    void update()
     {
-        tofArr[0] = sensor1.readRangeSingleMillimeters();
-        tofArr[1] = sensor2.readRangeSingleMillimeters();
-        tofArr[2] = sensor3.readRangeSingleMillimeters();
+        // tof update
+        tofReadings[0] = tofRight.readRangeContinuousMillimeters();
+        tofReadings[1] = tofCenter.readRangeContinuousMillimeters();
+        tofReadings[2] = tofLeft.readRangeContinuousMillimeters();
 
-        return tofArr;
-    }
+        for (int j = 0; j < 3; j++)
+        {
+            sum[j] -= tofArr[j][i];
+            tofArr[j][i] = tofReadings[j];
+            sum[j] += tofArr[j][i];
 
-    // getting LSM6DS3 readings
-    float *getGyroReadings()
-    {
-        gyroArr[0] = (float)readWord(OUTX_L_G) * 0.0175; // Convert to dps
-        gyroArr[1] = (float)readWord(OUTX_L_G + 2) * 0.0175;
-        gyroArr[2] = (float)readWord(OUTX_L_G + 4) * 0.0175;
+            tofAverage[j] = (float)sum[j] / 10 + tofOffset[j];
+        }
 
-        return gyroArr;
-    }
+        i++;
+        if (i >= 10)
+        {
+            i = i % 10;
+        }
 
-    float *getAccelReadings()
-    {
+        // gyro update
+        gyroArr[0] = (float)readWord(OUTX_L_G) * gyroSensitivity + gyroNoise[0]; // Convert to dps
+        gyroArr[1] = (float)readWord(OUTX_L_G + 2) * gyroSensitivity + gyroNoise[1];
+        gyroArr[2] = (float)readWord(OUTX_L_G + 4) * gyroSensitivity + gyroNoise[2];
 
-        accelArr[0] = (float)readWord(OUTX_L_XL) * 0.000122; // Convert to g
-        accelArr[1] = (float)readWord(OUTX_L_XL) * 0.000122;
-        accelArr[2] = (float)readWord(OUTX_L_XL) * 0.000122;
-
-        return accelArr;
-    }
-
-    // GY-271 readings
-    float *getMagReadings()
-    {
+        // magnetometer update
         if (magDetect)
         {
             sensors_event_t event;
             mag.getEvent(&event);
 
-            magArr[0] = event.magnetic.x;
-            magArr[1] = event.magnetic.y;
-            magArr[2] = event.magnetic.z;
+            magArr[0] = event.magnetic.x - centerOffsetX;
+            magArr[1] = event.magnetic.y - centerOffsetY;
         }
+    }
 
-        return magArr;
+    // VL530LX readings
+    float *getToFReadings()
+    {
+        return tofAverage;
+    }
+
+    // getting LSM6DS3 readings
+    float *getGyroReadings()
+    {
+        return gyroArr;
+    }
+
+    // didn't included this to the sensor update as this won't be much frequently needed
+    float *getAccelReadings()
+    {
+        accelArr[0] = (float)readWord(OUTX_L_XL) * accelScaleFact; // Convert to ms^-1
+        accelArr[1] = (float)readWord(OUTX_L_XL) * accelScaleFact;
+        accelArr[2] = (float)readWord(OUTX_L_XL) * accelScaleFact;
+
+        return accelArr;
+    }
+
+    // GY-271 readings
+    float getMagReadings()
+    {   
+        float direction = atan2(magArr[1]*scaleY, magArr[0]*scaleX) * radToDeg;
+        if (direction<0){
+            direction += 360;
+        }
+        return direction;
     }
 
     void writeByteGyro(uint8_t reg, uint8_t value)
@@ -143,15 +166,28 @@ public:
     }
 
 private:
-    // TOF
-    VL53L0X sensor1, sensor2, sensor3;
-
     // Magnetometer
     Adafruit_HMC5883_Unified mag = Adafruit_HMC5883_Unified(12345);
-
+    float magArr[2] = {0.0, 0.0};
     bool magDetect = false;
-    float tofArr[3] = {0.0, 0.0, 0.0};
+    float heading = 0;
+
+    // gyro
+    float gyroNoise[3] = {-1.8, 0.33, 1.56};
     float gyroArr[3] = {0.0, 0.0, 0.0};
+
+    // accel
     float accelArr[3] = {0.0, 0.0, 0.0};
-    float magArr[3] = {0.0, 0.0, 0.0};
+
+    // TOF
+    VL53L0X tofRight, tofCenter, tofLeft;
+    const int tofOffset[3] = {-40, -31, -10};
+    int tofReadings[3] = {0, 0, 0};
+    int tofArr[3][10] = {
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+    int i = 0;
+    int sum[3] = {0, 0, 0};
+    float tofAverage[3] = {0, 0, 0};
 };

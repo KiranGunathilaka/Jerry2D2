@@ -7,12 +7,12 @@ Encoders encoders;
 Motors motors;
 Sensors sensors;
 
-
 void setup()
 {
   encoders.begin();
   encoders.reset();
   motors.begin();
+  sensors.begin();
 
   Serial.begin(115200);
 }
@@ -20,40 +20,43 @@ void setup()
 void loop()
 {
   encoders.update();
-for (int i=0;i<30;i++){
-    motors.set_left_motor_percentage(i);
-    motors.set_right_motor_percentage(i);
-    Serial.println(i);
-    delay(100);
-}
-for (int i=0;i<60;i++){
-    motors.set_left_motor_percentage(30-i);
-    motors.set_right_motor_percentage(30-i);
-    Serial.println(30-i);
-    delay(100);
-}
-for (int i=0;i<30;i++){
-    motors.set_left_motor_percentage(i-30);
-    motors.set_right_motor_percentage(i-30);
-    Serial.println(i-30);
-    delay(100);
-}
+  sensors.update();
+  // for (int i = 0; i < 30; i++)
+  // {
+  //   motors.set_left_motor_percentage(i);
+  //   motors.set_right_motor_percentage(i);
+  //   Serial.println(i);
+  //   delay(100);
+  // }
+  // for (int i = 0; i < 60; i++)
+  // {
+  //   motors.set_left_motor_percentage(30 - i);
+  //   motors.set_right_motor_percentage(30 - i);
+  //   Serial.println(30 - i);
+  //   delay(100);
+  // }
+  // for (int i = 0; i < 30; i++)
+  // {
+  //   motors.set_left_motor_percentage(i - 30);
+  //   motors.set_right_motor_percentage(i - 30);
+  //   Serial.println(i - 30);
+  //   delay(100);
+  // }
 
+  // motors.set_left_motor_percentage(100);
+  // delay(100);
+  // motors.set_left_motor_percentage(-100);
 
-  motors.set_left_motor_percentage(100);
-  delay(100);
-  motors.set_left_motor_percentage(-100);
+  // Serial.print("Distance   :  ");
+  // Serial.print(encoders.robotDistance());
+  // Serial.print("    Angle   :  ");
+  // Serial.print(encoders.robotAngle());
+  // Serial.print("    Left  RPS :  ");
+  // Serial.print(encoders.leftRPS());
+  // Serial.print("    Right   :  ");
+  // Serial.println(encoders.rightRPS());
 
-  Serial.print("Distance   :  ");
-  Serial.print(encoders.robotDistance());
-  Serial.print("    Angle   :  ");
-  Serial.print(encoders.robotAngle());
-  Serial.print("    Left   :  ");
-  Serial.print(encoders.counterLeft());
-  Serial.print("    Right   :  ");
-  Serial.println(encoders.counterRight());
-
-  float* gyroData = sensors.getGyroReadings();
+  float *gyroData = sensors.getGyroReadings();
 
   float gyroX = gyroData[0];
   float gyroY = gyroData[1];
@@ -66,4 +69,19 @@ for (int i=0;i<30;i++){
   Serial.print("   Gyro Z:  ");
   Serial.println(gyroZ);
 
+  float* tofData = sensors.getToFReadings();
+  float tofRight = tofData[0];
+  float tofCenter = tofData[1];
+  float tofLeft = tofData[2];
+
+  Serial.print("ToF Right : ");
+  Serial.print(tofRight);
+  Serial.print("ToF Center: ");
+  Serial.print(tofCenter);
+  Serial.print("ToF Left  :  ");
+  Serial.println(tofLeft);
+
+  float direction = sensors.getMagReadings();
+  Serial.println(direction);
+  delay(100);
 }
