@@ -158,7 +158,7 @@ public:
     inline float robot_speed(){
         float speed ;
         noInterrupts();
-        speed = fwd_change / time_change_u ;
+        speed = fwd_change * 1000000/ time_change_u ;
         interrupts();
         return speed;
     }
@@ -166,7 +166,7 @@ public:
     inline float robot_omega(){
         float omega;
         noInterrupts();
-        omega = rot_change / time_change_u;
+        omega = rot_change * 1000000/ time_change_u;
         interrupts();
         return omega;
     }
@@ -187,26 +187,6 @@ public:
         distance = rot_change;
         interrupts();
         return distance;
-    }
-
-    inline int leftDelta(){
-        int count;
-
-        noInterrupts();
-        count = left_delta;
-        interrupts();
-
-        return count;
-    }
-
-    inline int rightDelta(){
-        int count;
-
-        noInterrupts();
-        count = right_delta;
-        interrupts();
-
-        return count;
     }
 
     inline int leftRPS(){

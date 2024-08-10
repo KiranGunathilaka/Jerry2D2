@@ -15,23 +15,35 @@ const int RightEncoderPin2 = 34;  // Assuming you might have another pin for Rig
 const int SCL_pin = 22;
 const int SDA_pin = 23;
 
-const int ToF_XSHUT_Left =5;
+const int ToF_XSHUT_Right =5;
 const int ToF_XSHUT_Center =18;
-const int ToF_XSHUT_Right = 19;
+const int ToF_XSHUT_Left = 19;
 
 
 
 #define LSM6DS3_ADDRESS 0x6B // I2C address of LSM6DS3
 
+//IMU register adddresses
 #define CTRL1_XL 0x10  // Accelerometer control register
 #define CTRL2_G 0x11   // Gyroscope control register
 #define OUTX_L_G 0x22  // First gyro data register
 #define OUTX_L_XL 0x28 // First accel data register
-//custom i2c addresses
 
-#define TOF_LEFT_ADD 0x30
+//custom i2c addresses
+#define TOF_RIGHT_ADD 0x30
 #define TOF_CENTER_ADD 0x31
-#define TOF_RIGH_ADD 0x32
+#define TOF_LEFT_ADD 0x32
+
+const float g = 9.80665; //ms^-1
+const float gyroSensitivity = 0.0175; //for dps
+const float accelSensitivity = 0.000122; //for g
+const float accelScaleFact = 0.0011964; // g*accelSensitivity
+
+const float radToDeg = 57.296;
+const float scaleY = 43.44; // these are the primary axis lengths of the ellipse that got from plotting x y magnetic field intensity values
+const float scaleX = 46.44;  //for more detyails see the calibaration code on the Arduino codes folder
+const float centerOffsetX = 20.91;
+const float centerOffsetY = -2.08;
 
 //**************************************************MOUSE CONFIG**************************************************************************
 const int wheelDiameter = 32; //in mm
