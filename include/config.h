@@ -82,3 +82,9 @@ const int RIGHT_MOTOR_PWM = 13;
 //change motor directions to make the motors spin forward when both motors are forward commanded
 #define MOTOR_LEFT_POLARITY (-1)
 #define MOTOR_RIGHT_POLARITY (1)
+
+//PD parameters
+const float FWD_KP = 0.05;
+const float FWD_KD = 0.01;
+const float ROT_KP = 1;
+const float ROT_KD = 1;
