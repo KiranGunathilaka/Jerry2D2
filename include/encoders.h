@@ -38,10 +38,6 @@ public:
         encoderCounterRight = 0;
         robot_distance = 0;
         robot_angle = 0;
-        //prevTime = micros();
-        //time_change_3 = 0;
-        //time_change_2 = 0;
-        //time_change_3 = 1;
 
         interrupts();
     }
@@ -142,6 +138,11 @@ public:
     inline int loopTime_us(){
         int looptime = time_change_u;
         return looptime;
+    }
+
+    inline float loopTime_s(){
+        float time = (float)time_change_u/1000000.0;
+        return time;
     }
     
     inline float robotDistance()
