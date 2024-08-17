@@ -45,9 +45,10 @@ receiveData received;
 // callback function that will be executed when data is received
 void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
   memcpy(&received, incomingData, sizeof(received));
-  Serial.print("Int: ");Serial.print(received.intData);
-  Serial.print("  Float: ");Serial.print(received.floatData);
-  Serial.print("  Char: ");Serial.println(received.stringData);
+  Serial.print(received.intData);
+  Serial.print("\n");
+  //Serial.print("  Float: ");Serial.print(received.floatData);
+  //Serial.print("  Char: ");Serial.println(received.stringData);
 }
 
 
