@@ -5,21 +5,21 @@
 #pragma once
 
 
-//pins
+//**************************************************ENCODER CONFIG**************************************************************************
 const int LeftEncoderPin1 = 33;
 const int LeftEncoderPin2 = 32;
 
 const int RightEncoderPin1 = 35;
 const int RightEncoderPin2 = 34;  // Assuming you might have another pin for Right Encoder
 
+
+//**************************************************SENSOR CONFIG**************************************************************************
 const int SCL_pin = 22;
 const int SDA_pin = 23;
 
 const int ToF_XSHUT_Right =5;
 const int ToF_XSHUT_Center =18;
 const int ToF_XSHUT_Left = 19;
-
-
 
 #define LSM6DS3_ADDRESS 0x6B // I2C address of LSM6DS3
 
@@ -53,12 +53,14 @@ const float WHEEL_GAP = 108; // distance between the wheels in mm
 
 const float MM_PER_ROTATION = 103.67; //  pi*wheel diameter .......d=33mm
 const float DEG_PER_MM_DIFFERENCE = 180.0/(3.14*WHEEL_GAP);
+
 //*****************************************************COMMUNICATIONS************************************************************************
 const char* SSID ="Chocolate";
 const char* WIFI_PASSWORD = "Pissu69pusa";
 const char* HOST_IP = "192.168.8.131"; //IP of host computer
 const int HOST_PORT = 1234;  // Port number on the PC
 const bool WIFI_ENABLE = true;
+
 //***************************************************MOTOR CONFIG***************************************************************************/
 //Left and Right Motor configurations
 const float MAX_MOTOR_PERCENTAGE = 90;
@@ -83,8 +85,11 @@ const int RIGHT_MOTOR_PWM = 13;
 #define MOTOR_LEFT_POLARITY (-1)
 #define MOTOR_RIGHT_POLARITY (1)
 
-//PD parameters
-const float FWD_KP = 0.05;
+//PD parameters   //make temporaly non const
+ float FWD_KP = 0.05; 
 const float FWD_KD = 0.01;
 const float ROT_KP = 1;
 const float ROT_KD = 1;
+
+//**************************************************REPORTING CONFIG**************************************************************************
+uint8_t broadcastAddress[] = { 0xEC, 0xDA, 0x3B, 0x51, 0xA5, 0x84 }; // RECEIVER MAC Address

@@ -2,21 +2,26 @@
 #include "encoders.h"
 #include "motors.h"
 #include "sensors.h"
-#include "communication.h"
+#include "reporting.h"
+#include "config.h"
 
 Encoders encoders;
 Motors motors;
 Sensors sensors;
-Communication communication;
+Reporting reporter;
+
+Reporting *Reporting::instance = nullptr; // Initialize the static member
 
 void setup()
 {
+  Serial.begin(115200);
+    
   encoders.begin();
   encoders.reset();
   motors.begin();
   sensors.begin();
-  Serial.begin(115200);
-  communication.begin();
+  reporter.begin();
+
 }
 
 void loop()
@@ -33,17 +38,10 @@ void loop()
       encoders.update();
       motors.update(250, 0);
 
-      // Serial.print("  given velocity  ");
-      // Serial.print(250);
-      // Serial.print(" actual velocity ");
-      // Serial.print(encoders.robot_speed());
-      // Serial.print("  motor percentage  ");
-      // Serial.println(motors.left_feed_forward_percentage(250));
+      reporter.send(encoders.robotDistance());
+      reporter.send(encoders.robotAngle());
 
-      // Serial.print("Distance   :");
-      // Serial.print(encoders.robotDistance());
-      // Serial.print("   Angle   : ");
-      // Serial.println(encoders.robotAngle());
+      FWD_KP = reporter.command.floatCmd;
     }
   }
 }
