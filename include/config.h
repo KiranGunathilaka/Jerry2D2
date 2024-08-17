@@ -87,10 +87,10 @@ const int RIGHT_MOTOR_PWM = 13;
 #define MOTOR_RIGHT_POLARITY (1)
 
 //PD parameters   //make temporaly non const
-const float FWD_KP = 0.1;
-const float FWD_KD = 0.0;
-const float ROT_KP = 0;
-const float ROT_KD = 0;
+const float FWD_KP = 0.0055;
+const float FWD_KD = 0.1;
+const float ROT_KP = 0.024;
+const float ROT_KD = 0.001;
 
 //**************************************************REPORTING CONFIG**************************************************************************
 uint8_t broadcastAddress[] = { 0xEC, 0xDA, 0x3B, 0x51, 0xA5, 0x84 }; // RECEIVER MAC Address

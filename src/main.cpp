@@ -33,29 +33,33 @@ void setup()
 
 void loop()
 { 
-  // motion.reset_drive_system();
-  // motion.start_move(1000, 400, 0, 500);
-  // while (!motion.move_finished())
-  // {
-  //   encoders.update();
-  //   motion.update();
-  //   sensors.update();
-  //   motors.update(motion.velocity(), motion.omega());
+  motion.start_move(300, 400, 0, 500);
+  while (!motion.move_finished())
+  {
+    encoders.update();
+    motion.update();
+    sensors.update();
+    motors.update(motion.velocity(), motion.omega());
 
-  //   Serial.print(motion.velocity());
-  //   Serial.print("       ");
-  //   Serial.println(motion.omega());
-  // }
-  
+    reporter.send(motion.velocity());
+    reporter.send(motion.omega());
+  }
 
-  encoders.update();
-  motors.update(300, 0);
+  motion.start_turn(90, 40, 0, 10);
+
+  while (!motion.turn_finished())
+  {
+    encoders.update();
+    motion.update();
+    sensors.update();
+    motors.update(motion.velocity(), motion.omega());
+
+    reporter.send(motion.velocity());
+    reporter.send(motion.omega());
+  }
   
   // Serial.print(encoders.robot_omega());
   // Serial.print("    ");
   // Serial.println(encoders.robot_speed());
-
-  Serial.println(encoders.robot_speed());
-  reporter.send(encoders.robot_speed());
 
 }
