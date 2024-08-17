@@ -3,6 +3,7 @@
 // we can have a nother maze config file also
 
 #pragma once
+#include "esp_system.h"
 
 
 //**************************************************ENCODER CONFIG**************************************************************************
@@ -86,7 +87,7 @@ const int RIGHT_MOTOR_PWM = 13;
 #define MOTOR_RIGHT_POLARITY (1)
 
 //PD parameters   //make temporaly non const
- float FWD_KP = 0.05; 
+const float FWD_KP = 0.05;
 const float FWD_KD = 0.01;
 const float ROT_KP = 1;
 const float ROT_KD = 1;

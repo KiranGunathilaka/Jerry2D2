@@ -7,9 +7,11 @@ bool stringComplete = false;
 
 //This ESP32 Board MAC Address: { 0xEC, 0xDA, 0x3B, 0x51, 0xA5, 0x84 };
 
+//Kavishka's esp MAC cc:7b:5c:36:23:94
+
 // RECEIVER MAC Address 
 //change this according to the micromouse esp
-uint8_t broadcastAddress[] = { 0xCC, 0x50, 0xE3, 0x41, 0x1C, 0xD6 };
+uint8_t broadcastAddress[] = { 0xCC, 0x7B, 0x5C, 0x36, 0x23, 0x94 };
 
 // Structure example to send data, Must match the receiver structure
 typedef struct trasnmitData {
