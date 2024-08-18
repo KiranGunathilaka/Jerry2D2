@@ -84,9 +84,9 @@ void setup()
   // Receiving code
   esp_now_register_recv_cb(esp_now_recv_cb_t(OnDataRecv));
 
-  command.fwdKp = 0.055;
+  command.fwdKp = 0.0055;
   command.fwdKd = 0.1;
-  command.rotKp = 0.04;
+  command.rotKp = 0.024;
   command.rotKd = 4;
   command.speed = 0;
   command.omega = 180;
