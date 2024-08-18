@@ -11,18 +11,22 @@ extern Reporting reporter;
 class Reporting
 {
 public:
+    int speed, omega;
+
     typedef struct sendData
     {
-        int intData;
-        float floatData;
-        String stringData;
+        float speedData;
+        float omegaData;
     } sendData;
 
     typedef struct receiveData
     {
-        int intCmd;
-        float floatCmd;
-        char stringCmd[20];
+        float fwdKp;
+        float fwdKd;
+        float rotKp;
+        float rotKd;
+        int speed;
+        int omega;
     } receiveData;
 
     receiveData command;
@@ -41,12 +45,21 @@ public:
         {
             memcpy(&instance->command, incomingData, sizeof(instance->command));
             
-            Serial.print("Int: ");
-            Serial.print(instance->command.intCmd);
-            Serial.print("  Float: ");
-            Serial.print(instance->command.floatCmd);
-            Serial.print("  String: ");
-            Serial.println(instance->command.stringCmd);
+            Serial.print("FWD KP  ");
+            motors.fwdKp = instance->command.fwdKp;
+            Serial.print(motors.fwdKp);
+            Serial.print("  FWD KD  ");
+            Serial.print(motors.fwdKd);
+            motors.fwdKd = instance->command.fwdKd;
+            Serial.print("  ROT KP  ");
+            Serial.print(motors.rotKp);
+            motors.rotKp = instance->command.rotKp;
+            Serial.print("  ROT KD  ");
+            Serial.print(motors.rotKd);
+            motors.rotKd = instance->command.rotKd;
+
+            instance->speed = instance->command.speed;
+            instance->omega = instance->command.omega;
         }
     }
 
@@ -83,11 +96,10 @@ public:
         esp_now_register_recv_cb(OnDataRecv);
     }
 
-    void send(int intdata = 0, float floatdata = 0.0, String stringdata = "")
+    void send(float speed, float omega)
     {
-        transmitData.intData = intdata;
-        transmitData.floatData = floatdata;
-        transmitData.stringData = stringdata;
+        transmitData.speedData = speed;
+        transmitData.omegaData = omega;
         // Send message via ESP-NOW
         esp_now_send(broadcastAddress, (uint8_t *)&transmitData, sizeof(transmitData));
     }

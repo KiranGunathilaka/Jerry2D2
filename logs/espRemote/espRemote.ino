@@ -4,20 +4,23 @@
 String inputString = "";
 bool stringComplete = false;
 
+// This ESP32 Board MAC Address: { 0xEC, 0xDA, 0x3B, 0x51, 0xA5, 0x84 };
 
-//This ESP32 Board MAC Address: { 0xEC, 0xDA, 0x3B, 0x51, 0xA5, 0x84 };
+// Kavishka's esp MAC cc:7b:5c:36:23:94
 
-//Kavishka's esp MAC cc:7b:5c:36:23:94
-
-// RECEIVER MAC Address 
-//change this according to the micromouse esp
-uint8_t broadcastAddress[] = { 0xCC, 0x7B, 0x5C, 0x36, 0x23, 0x94 };
+// RECEIVER MAC Address
+// change this according to the micromouse esp
+uint8_t broadcastAddress[] = {0xCC, 0x7B, 0x5C, 0x36, 0x23, 0x94};
 
 // Structure example to send data, Must match the receiver structure
-typedef struct trasnmitData {
-    int intCmd;
-    float floatCmd;
-    String stringCmd;
+typedef struct trasnmitData
+{
+  float fwdKp;
+  float fwdKd;
+  float rotKp;
+  float rotKd;
+  int speed;
+  int omega;
 } transmitData;
 
 // Create a struct_message called myData
@@ -25,41 +28,40 @@ transmitData command;
 
 esp_now_peer_info_t peerInfo;
 
-
 // callback when data is sent
-void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
+void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status)
+{
   Serial.print("\r\nLast Packet Send Status:\t");
   Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
 }
 
-
-
-typedef struct receiveData {
-  int intData;
-  float floatData; 
-  char stringData[20];
+typedef struct receiveData
+{
+  float speed;
+  float omega;
 } receiveData;
 
 receiveData received;
 
 // callback function that will be executed when data is received
-void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
+void OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len)
+{
   memcpy(&received, incomingData, sizeof(received));
-  Serial.print(received.intData);
-  Serial.print("\n");
-  //Serial.print("  Float: ");Serial.print(received.floatData);
-  //Serial.print("  Char: ");Serial.println(received.stringData);
+  Serial.print(received.speed );
+  Serial.print(",");
+  //>0 ? received.omega-command.omega : received.omega+command.omega
+  Serial.print(received.omega );
+  Serial.println(",");
 }
 
-
-
-
-void setup() {
+void setup()
+{
   Serial.begin(115200);
   WiFi.mode(WIFI_STA);
 
   // Init ESP-NOW
-  if (esp_now_init() != ESP_OK) {
+  if (esp_now_init() != ESP_OK)
+  {
     Serial.println("Error initializing ESP-NOW");
     return;
   }
@@ -73,98 +75,125 @@ void setup() {
   peerInfo.encrypt = false;
 
   // Add peer
-  if (esp_now_add_peer(&peerInfo) != ESP_OK) {
+  if (esp_now_add_peer(&peerInfo) != ESP_OK)
+  {
     Serial.println("Failed to add peer");
     return;
   }
-  
+
   // Receiving code
   esp_now_register_recv_cb(esp_now_recv_cb_t(OnDataRecv));
+
+  command.fwdKp = 0.055;
+  command.fwdKd = 0.1;
+  command.rotKp = 0.04;
+  command.rotKd = 4;
+  command.speed = 0;
+  command.omega = 180;
+  // Send message via ESP-NOW
+  delay(1000);
+  esp_now_send(broadcastAddress, (uint8_t *)&command, sizeof(command));
 }
 
-void loop() {
-  
-  //receivedCode handling
-  if (stringComplete) {
-    serialEvent();
-    char type = identifyType(inputString);
-    
-    if (type == 'i'){
-      Serial.println(inputString.toInt());
-      command.intCmd = inputString.toInt();
-      command.floatCmd = 0.0;
-      command.stringCmd = "";
+void loop()
+{
 
-    }else if(type =='f'){
-      Serial.println(inputString.toFloat());
-      command.floatCmd = inputString.toFloat();
-      command.intCmd = 0;
-      command.stringCmd = "";
+  // receivedCode handling
+  // if (stringComplete)
+  // {
+  //   serialEvent();
+  //   char type = identifyType(inputString);
 
-    }else if(type == 's'){
-      Serial.println(command.stringCmd);
-      command.stringCmd = inputString; //transmitting string is okay, but need to receive them as char arrays
-      command.floatCmd = 0.0;
-      command.intCmd = 0;
+  //   if (type == 'i')
+  //   {
+  //     Serial.println(inputString.toInt());
+  //     command.intCmd = inputString.toInt();
+  //     command.floatCmd = 0.0;
+  //     command.stringCmd = "";
+  //   }
+  //   else if (type == 'f')
+  //   {
+  //     Serial.println(inputString.toFloat());
+  //     command.floatCmd = inputString.toFloat();
+  //     command.intCmd = 0;
+  //     command.stringCmd = "";
+  //   }
+  //   else if (type == 's')
+  //   {
+  //     Serial.println(command.stringCmd);
+  //     command.stringCmd = inputString; // transmitting string is okay, but need to receive them as char arrays
+  //     command.floatCmd = 0.0;
+  //     command.intCmd = 0;
+  //   }
 
-    }
 
-    // Send message via ESP-NOW
-    esp_now_send(broadcastAddress, (uint8_t *)&command, sizeof(command));
-
-    inputString = "";
-    stringComplete = false;
-  }
-
+  // inputString = "";
+  // stringComplete = false;
+  // }
 }
 
 // commands given using serial will be detected by this
-void serialEvent() {
-  while (Serial.available()) {
-    char inChar = (char)Serial.read();
-    if (inChar == '\n') {
-      stringComplete = true;
-    } else {
-      inputString += inChar;
-    }
-  }
-}
+// void serialEvent()
+// {
+//   while (Serial.available())
+//   {
+//     char inChar = (char)Serial.read();
+//     if (inChar == '\n')
+//     {
+//       stringComplete = true;
+//     }
+//     else
+//     {
+//       inputString += inChar;
+//     }
+//   }
+// }
 
-//used to catergarize and assign data to the struct according to the data type
-char identifyType(String input) {
-  input.trim();  // Remove leading/trailing whitespace
+// // used to catergarize and assign data to the struct according to the data type
+// char identifyType(String input)
+// {
+//   input.trim(); // Remove leading/trailing whitespace
 
-  // Check for integer
-  bool isInt = true;
-  for (unsigned int i = 0; i < input.length(); i++) {
-    if (i == 0 && input.charAt(i) == '-') continue;  // Allow negative numbers
-    if (!isDigit(input.charAt(i))) {
-      isInt = false;
-      break;
-    }
-  }
-  if (isInt) {
-    return 'i';
-  }
+//   // Check for integer
+//   bool isInt = true;
+//   for (unsigned int i = 0; i < input.length(); i++)
+//   {
+//     if (i == 0 && input.charAt(i) == '-')
+//       continue; // Allow negative numbers
+//     if (!isDigit(input.charAt(i)))
+//     {
+//       isInt = false;
+//       break;
+//     }
+//   }
+//   if (isInt)
+//   {
+//     return 'i';
+//   }
 
-  // Check for float
-  bool isFloat = true;
-  bool hasDecimal = false;
-  for (unsigned int i = 0; i < input.length(); i++) {
-    if (i == 0 && input.charAt(i) == '-') continue;  // Allow negative numbers
-    if (input.charAt(i) == '.' && !hasDecimal) {
-      hasDecimal = true;
-      continue;
-    }
-    if (!isDigit(input.charAt(i))) {
-      isFloat = false;
-      break;
-    }
-  }
-  if (isFloat && hasDecimal) {
-    return 'f';
-  }
+//   // Check for float
+//   bool isFloat = true;
+//   bool hasDecimal = false;
+//   for (unsigned int i = 0; i < input.length(); i++)
+//   {
+//     if (i == 0 && input.charAt(i) == '-')
+//       continue; // Allow negative numbers
+//     if (input.charAt(i) == '.' && !hasDecimal)
+//     {
+//       hasDecimal = true;
+//       continue;
+//     }
+//     if (!isDigit(input.charAt(i)))
+//     {
+//       isFloat = false;
+//       break;
+//     }
+//   }
+//   if (isFloat && hasDecimal)
+//   {
+//     return 'f';
+//   }
 
-  // If not int, or float, assume it's a string
-  return 's';
-}
+//   // If not int, or float, assume it's a string
+//   return 's';
+// }

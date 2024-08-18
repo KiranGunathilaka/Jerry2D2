@@ -65,3 +65,32 @@
 
   // communication.send("Direction:"+String(direction));
   // communication.send(String('/'));
+
+
+  //************************************************read sensors data tof********************************************
+  // void update()
+  //   {
+  //       // tof update
+  //       int t = millis();
+  //       for (int j = 0; j < 5; j++)
+  //       {
+  //           tofReadings[0] += tofRight.readRangeContinuousMillimeters();
+  //           tofReadings[1] += tofCenRight.readRangeContinuousMillimeters();
+  //           tofReadings[2] += tofCenLeft.readRangeContinuousMillimeters();
+  //           tofReadings[3] += tofLeft.readRangeContinuousMillimeters();
+  //       }
+
+  //       for (int i = 0; i < 4; i++)
+  //       {
+  //           tofAverage[i] = (float)tofReadings[i] / 5.0;
+  //           tofReadings[i] = 0;
+  //       }
+
+  //       // tofAverage[0] = tofRight.readRangeContinuousMillimeters();
+  //       // tofAverage[1] = tofCenRight.readRangeContinuousMillimeters();
+  //       // tofAverage[2] = tofCenLeft.readRangeContinuousMillimeters();
+  //       // tofAverage[3] = tofLeft.readRangeContinuousMillimeters();
+
+  //       t -= millis();
+  //       Serial.println(t);
+  //   }

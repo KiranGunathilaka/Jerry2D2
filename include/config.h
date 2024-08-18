@@ -19,7 +19,8 @@ const int SCL_pin = 22;
 const int SDA_pin = 23;
 
 const int ToF_XSHUT_Right =5;
-const int ToF_XSHUT_Center =18;
+const int ToF_XSHUT_CenRight =18;
+const int ToF_XSHUT_CenLeft = 21;
 const int ToF_XSHUT_Left = 19;
 
 #define LSM6DS3_ADDRESS 0x6B // I2C address of LSM6DS3
@@ -32,8 +33,9 @@ const int ToF_XSHUT_Left = 19;
 
 //custom i2c addresses
 #define TOF_RIGHT_ADD 0x30
-#define TOF_CENTER_ADD 0x31
-#define TOF_LEFT_ADD 0x32
+#define TOF_CENRIGHT_ADD 0x31
+#define TOF_CENLEFT_ADD 0x32
+#define TOF_LEFT_ADD 0x33
 
 const float g = 9.80665; //ms^-1
 const float gyroSensitivity = 0.0175; //for dps
@@ -89,7 +91,7 @@ const int RIGHT_MOTOR_PWM = 13;
 //PD parameters   //make temporaly non const
 const float FWD_KP = 0.0055;
 const float FWD_KD = 0.1;
-const float ROT_KP = 0.024;
+const float ROT_KP = 0.0055;
 const float ROT_KD = 0.001;
 
 //**************************************************REPORTING CONFIG**************************************************************************

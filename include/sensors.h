@@ -17,7 +17,7 @@ class Sensors
 public:
     void begin()
     {
-        Wire.begin(SDA_pin, SCL_pin, 100000); // SDA , SCL
+        Wire.begin(SDA_pin, SCL_pin, 400000); // SDA , SCL
 
         pinMode(23, INPUT_PULLUP);
         pinMode(22, INPUT_PULLUP);
@@ -29,11 +29,13 @@ public:
 
         // ToF address change
         pinMode(ToF_XSHUT_Right, OUTPUT);
-        pinMode(ToF_XSHUT_Center, OUTPUT);
+        pinMode(ToF_XSHUT_CenRight, OUTPUT);
+        pinMode(ToF_XSHUT_CenLeft, OUTPUT);
         pinMode(ToF_XSHUT_Left, OUTPUT);
 
         digitalWrite(ToF_XSHUT_Right, LOW);
-        digitalWrite(ToF_XSHUT_Center, LOW);
+        digitalWrite(ToF_XSHUT_CenRight, LOW);
+        digitalWrite(ToF_XSHUT_CenLeft, LOW);
         digitalWrite(ToF_XSHUT_Left, LOW);
 
         Serial.begin(115200);
@@ -46,13 +48,20 @@ public:
         tofRight.setAddress(TOF_RIGHT_ADD);
 
         // changing address of 2nd tof
-        digitalWrite(ToF_XSHUT_Center, HIGH);
+        digitalWrite(ToF_XSHUT_CenRight, HIGH);
         delay(30);
-        tofCenter.init(true);
+        tofCenRight.init(true);
         delay(30);
-        tofCenter.setAddress(TOF_CENTER_ADD);
+        tofCenRight.setAddress(TOF_CENRIGHT_ADD);
 
-        // changing address of 3rd tof
+        // changing the third ToF
+        digitalWrite(ToF_XSHUT_CenLeft, HIGH);
+        delay(30);
+        tofCenLeft.init(true);
+        delay(30);
+        tofCenLeft.setAddress(TOF_CENLEFT_ADD);
+
+        // changing address of 4th tof
         digitalWrite(ToF_XSHUT_Left, HIGH);
         delay(30);
         tofLeft.init(true);
@@ -60,8 +69,16 @@ public:
         tofLeft.setAddress(TOF_LEFT_ADD);
 
         tofRight.startContinuous();
-        tofCenter.startContinuous();
+        tofCenRight.startContinuous();
+        tofCenLeft.startContinuous();
         tofLeft.startContinuous();
+
+        // according to the library this doesn't just reduce range, also reduces accuracy.
+        // change to higher value if reading time doesn't affect the control loop
+        tofLeft.setMeasurementTimingBudget(20000);
+        tofCenLeft.setMeasurementTimingBudget(20000);
+        tofCenRight.setMeasurementTimingBudget(20000);
+        tofRight.setMeasurementTimingBudget(20000);
 
         // Magnetometer initialization
         magDetect = mag.begin();
@@ -70,29 +87,12 @@ public:
     void update()
     {
         // tof update
-        tofReadings[0] = tofRight.readRangeContinuousMillimeters();
-        tofReadings[1] = tofCenter.readRangeContinuousMillimeters();
-        tofReadings[2] = tofLeft.readRangeContinuousMillimeters();
+        int t = millis();
 
-        for (int j = 0; j < 3; j++)
-        {
-            sum[j] -= tofArr[j][i];
-            tofArr[j][i] = tofReadings[j];
-            sum[j] += tofArr[j][i];
-
-            tofAverage[j] = (float)sum[j] / 10 + tofOffset[j];
-        }
-
-        i++;
-        if (i >= 10)
-        {
-            i = i % 10;
-        }
-
-        // gyro update
-        gyroArr[0] = (float)readWord(OUTX_L_G) * gyroSensitivity + gyroNoise[0]; // Convert to dps
-        gyroArr[1] = (float)readWord(OUTX_L_G + 2) * gyroSensitivity + gyroNoise[1];
-        gyroArr[2] = (float)readWord(OUTX_L_G + 4) * gyroSensitivity + gyroNoise[2];
+        tof[0] = tofLeft.readRangeContinuousMillimeters() + tofOffset[0];
+        tof[1] = tofCenLeft.readRangeContinuousMillimeters() + tofOffset[1];
+        tof[2] = tofCenRight.readRangeContinuousMillimeters() + tofOffset[2];
+        tof[3] = tofRight.readRangeContinuousMillimeters() + tofOffset[3];
 
         // magnetometer update
         if (magDetect)
@@ -103,17 +103,24 @@ public:
             magArr[0] = event.magnetic.x - centerOffsetX;
             magArr[1] = event.magnetic.y - centerOffsetY;
         }
+
+        t -= millis();
+        Serial.println(t);
     }
 
     // VL530LX readings
-    float *getToFReadings()
+    int *getToFReadings()
     {
-        return tofAverage;
+        return tof;
     }
 
     // getting LSM6DS3 readings
     float *getGyroReadings()
     {
+        // gyro update
+        gyroArr[0] = (float)readWord(OUTX_L_G) * gyroSensitivity + gyroNoise[0]; // Convert to dps
+        gyroArr[1] = (float)readWord(OUTX_L_G + 2) * gyroSensitivity + gyroNoise[1];
+        gyroArr[2] = (float)readWord(OUTX_L_G + 4) * gyroSensitivity + gyroNoise[2];
         return gyroArr;
     }
 
@@ -129,9 +136,10 @@ public:
 
     // GY-271 readings
     float getMagReadings()
-    {   
-        float direction = atan2(magArr[1]*scaleY, magArr[0]*scaleX) * radToDeg;
-        if (direction<0){
+    {
+        float direction = atan2(magArr[1] * scaleY, magArr[0] * scaleX) * radToDeg;
+        if (direction < 0)
+        {
             direction += 360;
         }
         return direction;
@@ -180,14 +188,7 @@ private:
     float accelArr[3] = {0.0, 0.0, 0.0};
 
     // TOF
-    VL53L0X tofRight, tofCenter, tofLeft;
-    const int tofOffset[3] = {-40, -31, -10};
-    int tofReadings[3] = {0, 0, 0};
-    int tofArr[3][10] = {
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
-    int i = 0;
-    int sum[3] = {0, 0, 0};
-    float tofAverage[3] = {0, 0, 0};
+    VL53L0X tofRight, tofCenRight, tofCenLeft, tofLeft;
+    const int tofOffset[4] = {-25, -45, -42, -32};
+    int tof[4] = {0, 0, 0, 0};
 };
