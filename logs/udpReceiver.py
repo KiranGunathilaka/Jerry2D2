@@ -1,6 +1,6 @@
 import socket
 
-host = '192.168.8.131'
+host = '192.168.1.53'
 port = 1234
 data_string = ''
 data_array = [0.0,0.0,0,0,0.0,0.0,0.0,0.0,0.0,0.0,0.0] #0distance/1anle/2 left rps/3 right rps/4 gyro x/5 gyro y/6 gyro z/7 tof left/8 tof centre/9 tof right/10 magnetometer directio

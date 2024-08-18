@@ -124,10 +124,7 @@ public:
 
         float left_change = (float)left_delta * MM_PER_ROTATION/ PULSES_PER_ROTATION;
         float right_change = (float)right_delta * MM_PER_ROTATION/ PULSES_PER_ROTATION;
-        // Serial.print(left_delta);
-        // Serial.print('|');
-        // Serial.print(left_change);
-        // Serial.print(' ');
+
 
         fwd_change = 0.5 * (right_change + left_change); // taking average, distance in millimeters
         robot_distance += fwd_change;
@@ -148,52 +145,64 @@ public:
     inline float robotDistance()
     {
         float distance;
+
         noInterrupts();
         distance = robot_distance; //in mm
         interrupts();
+
         return distance;
     }
 
     inline float robotAngle()
     {
         float angle;
+
         noInterrupts();
         angle = robot_angle;
         interrupts();
+
         return angle;
     }
 
     inline float robot_speed(){
         float speed ;
+
         noInterrupts();
         speed = (fwd_change/ time_change_u)* 1000000;
         interrupts();
+
         return speed;
     }
 
     inline float robot_omega(){   /////given in degrees per second!!!!!
         float omega;
+
         noInterrupts();
         omega = (rot_change/time_change_u)* 1000000;
         interrupts();
+
         return omega;
     }
 
     inline float robot_fwd_change()
     {
         float distance;
+
         noInterrupts();
         distance = fwd_change;
         interrupts();
+
         return distance;
     }
 
     inline float robot_rot_change()
     {
         float distance;
+        
         noInterrupts();
         distance = rot_change;
         interrupts();
+
         return distance;
     }
 
