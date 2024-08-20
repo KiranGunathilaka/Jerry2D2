@@ -48,6 +48,15 @@ const float scaleX = 46.44;  //for more detyails see the calibaration code on th
 const float centerOffsetX = 20.91;
 const float centerOffsetY = -2.08;
 
+const float RIGHT_DISTANCE_THRESHOLD = 80.0; //in mm
+const float LEFT_DISTANCE_THRESHOLD = 80.0; //in mm
+const float FRONT_THRESHOLD = 200.0; //in mm
+const float SIDE_DISTANCE = 55.0;
+
+const float STEERING_KP = 0.8;
+const float STEERING_KD = 1.3;
+const float STEERING_ADJUST_LIMIT = 35.0;
+
 //**************************************************MOUSE CONFIG**************************************************************************
 const int wheelDiameter = 32; //in mm
 const int MOUSE_RADIUS = 14;
@@ -67,7 +76,8 @@ const bool WIFI_ENABLE = true;
 //***************************************************MOTOR CONFIG***************************************************************************/
 //Left and Right Motor configurations
 const float MAX_MOTOR_PERCENTAGE = 90;
-const int MIN_MOTOR_BIAS = 10;
+const int MIN_MOTOR_PERCENTAGE = 15; // when the given percentage is below this value, percentage is set to zero to damp oscillations
+const int MIN_MOTOR_BIAS = 10;// miinimum percentage that should be given for the motors to spin
 const int PWM_RESOLUTION_BITS = 8;
 const int PWM_RESOLUTION = 256; //2^8 use a suitable code to automate this
 const int PULSES_PER_ROTATION = 1430;
@@ -88,11 +98,11 @@ const int RIGHT_MOTOR_PWM = 13;
 #define MOTOR_LEFT_POLARITY (-1)
 #define MOTOR_RIGHT_POLARITY (1)
 
-//PD parameters   //make temporaly non const
-const float FWD_KP = 0.0055;
-const float FWD_KD = 0.1;
-const float ROT_KP = 0.024;
-const float ROT_KD = 4;
+//PD parameters  
+const float FWD_KP = 0.5;
+const float FWD_KD = 0.34;
+const float ROT_KP = 0.8;
+const float ROT_KD = 1.2;
 
 //**************************************************REPORTING CONFIG**************************************************************************
 uint8_t broadcastAddress[] = { 0xEC, 0xDA, 0x3B, 0x51, 0xA5, 0x84 }; // RECEIVER MAC Address
