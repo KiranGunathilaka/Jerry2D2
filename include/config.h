@@ -57,6 +57,8 @@ const float STEERING_KP = 0.8;
 const float STEERING_KD = 1.3;
 const float STEERING_ADJUST_LIMIT = 35.0;
 
+const float rightFrontSideAngle = 38.6;
+const float leftFrontSideAngle = 47.0;
 //**************************************************MOUSE CONFIG**************************************************************************
 const int wheelDiameter = 32; //in mm
 const int MOUSE_RADIUS = 14;

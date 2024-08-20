@@ -23,7 +23,7 @@ extern Sensors sensors;
 class Sensors
 {
 public:
-    //remove after adjusting
+    // remove after adjusting
     float tempKp = STEERING_KP;
     float tempKd = STEERING_KD;
 
@@ -161,19 +161,6 @@ public:
 
         left_tof = abs(prevLeft - left_tof) > 3 ? left_tof : prevLeft;
         right_tof = abs(prevRight - right_tof) > 3 ? right_tof : prevRight;
-
-
-
-        // magnetometer update
-        if (magDetect)
-        {
-            sensors_event_t event;
-            mag.getEvent(&event);
-
-            magArr[0] = event.magnetic.x - centerOffsetX;
-            magArr[1] = event.magnetic.y - centerOffsetY;
-        }
-
         // t -= millis();
         // Serial.println(t);
 
@@ -185,24 +172,12 @@ public:
         frontDiff = center_left_tof - center_right_tof;
         frontWallExist = frontSum < FRONT_THRESHOLD;
 
-
-        float rfd = center_right_tof + 25.0;
-        float rsd = right_tof+ 45.0;
-        float rCosX = sin(38.6)*rfd/sqrt(rfd*rfd  + rsd*rsd - 2*rfd*rsd*cos(38.6 * DEG_TO_RAD));
-        rightDistance = rCosX*rsd -20.0 -45.0 * rCosX;
-
-        float lfd = center_left_tof + 30.0;
-        float lsd = left_tof+ 45.0;
-        Serial.print(lfd);
-        Serial.print(" ");
-        Serial.println(lsd);
-        float lCosX = sin(47.0)*lfd/sqrt(lfd*lfd  + lsd*lsd - 2*lfd*lsd*cos(47.0 * DEG_TO_RAD));
-        leftDistance = lCosX * lsd - 45.0 * lCosX;
+        calculate_orthogonal_distance();
 
         // steering
         float error = 0;
-        float rightError = SIDE_DISTANCE - right_tof;
-        float leftError = SIDE_DISTANCE - left_tof;
+        float rightError = SIDE_DISTANCE - rightDistance;
+        float leftError = SIDE_DISTANCE - leftDistance;
 
         if (steering_mode == STEER_NORMAL)
         {
@@ -230,6 +205,30 @@ public:
 
         cross_track_error = error;
         calculate_steering_adjustment();
+
+        // magnetometer update
+        if (magDetect)
+        {
+            sensors_event_t event;
+            mag.getEvent(&event);
+
+            magArr[0] = event.magnetic.x - centerOffsetX;
+            magArr[1] = event.magnetic.y - centerOffsetY;
+        }
+    }
+
+
+    float calculate_orthogonal_distance()
+    {
+        float rfd = center_right_tof + 25.0;
+        float rsd = right_tof + 45.0;
+        float rCosX = sin(rightFrontSideAngle) * rfd / sqrt(rfd * rfd + rsd * rsd - 2 * rfd * rsd * cos(rightFrontSideAngle * DEG_TO_RAD));
+        rightDistance = rCosX * rsd - 20.0 - 45.0 * rCosX;
+
+        float lfd = center_left_tof + 30.0;
+        float lsd = left_tof + 45.0;
+        float lCosX = sin(leftFrontSideAngle) * lfd / sqrt(lfd * lfd + lsd * lsd - 2 * lfd * lsd * cos(leftFrontSideAngle * DEG_TO_RAD));
+        leftDistance = lCosX * lsd - 45.0 * lCosX;
     }
 
     float calculate_steering_adjustment()
