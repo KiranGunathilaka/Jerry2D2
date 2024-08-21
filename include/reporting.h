@@ -112,8 +112,8 @@ public:
 
     void send()
     {
-        transmitData.speedData = sensors.rightDistance;
-        transmitData.omegaData = sensors.leftDistance;
+        transmitData.speedData = encoders.robot_speed();
+        transmitData.omegaData = encoders.robot_omega();
         transmitData.front = sensors.frontWallExist;
         transmitData.right = sensors.rightWallExist;
         transmitData.left = sensors.leftWallExist;

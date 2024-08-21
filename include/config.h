@@ -101,9 +101,9 @@ const int RIGHT_MOTOR_PWM = 13;
 #define MOTOR_RIGHT_POLARITY (1)
 
 //PD parameters  
-const float FWD_KP = 0.5;
-const float FWD_KD = 0.34;
-const float ROT_KP = 0.8;
+const float FWD_KP = 0.01;
+const float FWD_KD = 0.64;
+const float ROT_KP = 1.3;
 const float ROT_KD = 1.2;
 
 //**************************************************REPORTING CONFIG**************************************************************************
