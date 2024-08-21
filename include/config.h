@@ -19,8 +19,8 @@ const int SCL_pin = 22;
 const int SDA_pin = 23;
 
 const int ToF_XSHUT_Right =5;
-const int ToF_XSHUT_CenRight =18;
-const int ToF_XSHUT_CenLeft = 21;
+const int ToF_XSHUT_Center =18;
+//const int ToF_XSHUT_CenLeft = 21;
 const int ToF_XSHUT_Left = 19;
 
 #define LSM6DS3_ADDRESS 0x6B // I2C address of LSM6DS3
@@ -33,8 +33,8 @@ const int ToF_XSHUT_Left = 19;
 
 //custom i2c addresses
 #define TOF_RIGHT_ADD 0x30
-#define TOF_CENRIGHT_ADD 0x31
-#define TOF_CENLEFT_ADD 0x32
+#define TOF_CENTER_ADD 0x31
+//#define TOF_CENLEFT_ADD 0x32
 #define TOF_LEFT_ADD 0x33
 
 const float g = 9.80665; //ms^-1
@@ -50,12 +50,12 @@ const float centerOffsetY = -2.08;
 
 const float RIGHT_DISTANCE_THRESHOLD = 80.0; //in mm
 const float LEFT_DISTANCE_THRESHOLD = 80.0; //in mm
-const float FRONT_THRESHOLD = 200.0; //in mm
+const float FRONT_THRESHOLD = 100.0; //in mm
 const float SIDE_DISTANCE = 55.0;
 
 const float STEERING_KP = 0.8;
 const float STEERING_KD = 1.3;
-const float STEERING_ADJUST_LIMIT = 35.0;
+const float STEERING_ADJUST_LIMIT = 10.0;
 
 const float rightFrontSideAngle = 38.6;
 const float leftFrontSideAngle = 47.0;
@@ -141,10 +141,10 @@ struct TurnParameters {
   int trigger;       //         - front sensor value at start of turn
 };
 
-const TurnParameters turn_params[4] = {
-    //           speed, entry,   exit, angle, omega,  alpha, sensor threshold
-    {SEARCH_TURN_SPEED,    70,     80,  90.0, 287.0, 2866.0, TURN_THRESHOLD_SS90E}, // 0 => SS90EL
-    {SEARCH_TURN_SPEED,    70,     80, -90.0, 287.0, 2866.0, TURN_THRESHOLD_SS90E}, // 0 => SS90ER
-    {SEARCH_TURN_SPEED,    70,     80,  90.0, 287.0, 2866.0, TURN_THRESHOLD_SS90E}, // 0 => SS90L
-    {SEARCH_TURN_SPEED,    70,     80, -90.0, 287.0, 2866.0, TURN_THRESHOLD_SS90E}, // 0 => SS90R
-};
+// const TurnParameters turn_params[4] = {
+//     //           speed, entry,   exit, angle, omega,  alpha, sensor threshold
+//     {SEARCH_TURN_SPEED,    70,     80,  90.0, 287.0, 2866.0, TURN_THRESHOLD_SS90E}, // 0 => SS90EL
+//     {SEARCH_TURN_SPEED,    70,     80, -90.0, 287.0, 2866.0, TURN_THRESHOLD_SS90E}, // 0 => SS90ER
+//     {SEARCH_TURN_SPEED,    70,     80,  90.0, 287.0, 2866.0, TURN_THRESHOLD_SS90E}, // 0 => SS90L
+//     {SEARCH_TURN_SPEED,    70,     80, -90.0, 287.0, 2866.0, TURN_THRESHOLD_SS90E}, // 0 => SS90R
+// };
