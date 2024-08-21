@@ -108,3 +108,43 @@ const float ROT_KD = 1.2;
 
 //**************************************************REPORTING CONFIG**************************************************************************
 uint8_t broadcastAddress[] = { 0xEC, 0xDA, 0x3B, 0x51, 0xA5, 0x84 }; // RECEIVER MAC Address
+
+//**************************************************MOUSE CONFIG****************************************************************************
+
+const int FULL_CELL = 180; //in mm
+const int HALF_CELL = 90;
+const int FRONT_REFERENCE = 200; // sum of the distance readings when mouse positioned centered in a cell before a front wall
+
+const int OMEGA_SPIN_TURN = 360;
+const int ALPHA_SPIN_TURN = 3600;
+
+const int SEARCH_TURN_SPEED= 300;
+
+const int EXTRA_WALL_ADJUST = 12; //wall thickness
+
+//the position where the sensors are supposed to get readings if IR sensors were used
+//need to update what do to when using ToF
+const float SENSING_POSITION = 170.0;
+
+const int SEARCH_SPEED = 300;
+const int SEARCH_ACCELERATION = 1000;
+
+const int BACK_WALL_TO_CENTER = 0; //distance that need to be travelled to go to the center when robot is against the backwall
+
+struct TurnParameters {
+  int speed;         // mm/s    - constant forward speed during turn
+  int entry_offset;  // mm      - distance from turn pivot to turn start
+  int exit_offset;   // mm      - distance from turn pivot to turn end
+  float angle;       // deg     - total turn angle
+  float omega;       // deg/s   - maximum angular velocity
+  float alpha;       // deg/s/s - angular acceleration
+  int trigger;       //         - front sensor value at start of turn
+};
+
+const TurnParameters turn_params[4] = {
+    //           speed, entry,   exit, angle, omega,  alpha, sensor threshold
+    {SEARCH_TURN_SPEED,    70,     80,  90.0, 287.0, 2866.0, TURN_THRESHOLD_SS90E}, // 0 => SS90EL
+    {SEARCH_TURN_SPEED,    70,     80, -90.0, 287.0, 2866.0, TURN_THRESHOLD_SS90E}, // 0 => SS90ER
+    {SEARCH_TURN_SPEED,    70,     80,  90.0, 287.0, 2866.0, TURN_THRESHOLD_SS90E}, // 0 => SS90L
+    {SEARCH_TURN_SPEED,    70,     80, -90.0, 287.0, 2866.0, TURN_THRESHOLD_SS90E}, // 0 => SS90R
+};

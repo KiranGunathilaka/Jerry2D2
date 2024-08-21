@@ -84,7 +84,6 @@ public:
         finish();
     }
 
-    /// @brief  Force a profile to finish with the target speed set to the final speed
     void finish()
     {
         noInterrupts();
@@ -145,6 +144,7 @@ public:
         m_speed = speed;
         interrupts();
     }
+
     void set_target_speed(float speed)
     {
         noInterrupts();
@@ -152,7 +152,7 @@ public:
         interrupts();
     }
 
-    // normally only used to alter position for forward error correction
+    // only used to alter position for forward error correction
     void adjust_position(float adjustment)
     {
         noInterrupts();
@@ -190,6 +190,7 @@ public:
                 };
             }
         }
+        
         // try to reach the target speed
         if (m_speed < m_target_speed)
         {
