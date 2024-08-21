@@ -31,16 +31,21 @@ void setup()
 
   motion.reset_drive_system();
 
-  // Serial.print("Before change:  FWD KP  ");
-  // Serial.print(motors.fwdKp, 4);
-  // Serial.print("  FWD KD  ");
-  // Serial.print(motors.fwdKd, 4);
-  // Serial.print("  ROT KP  ");
-  // Serial.print(motors.rotKp, 4);
-  // Serial.print("  ROT KD  ");
-  // Serial.println(motors.rotKd, 4);
+  Serial.print("Before change:   KP  ");
+  Serial.print(sensors.tempKp, 4);
+  Serial.print("   KD  ");
+  Serial.print(sensors.tempKd, 4);
+  // // Serial.print("  ROT KP  ");
+  // // Serial.print(motors.rotKp, 4);
+  // // Serial.print("  ROT KD  ");
+  // // Serial.println(motors.rotKd, 4);
 
-  // delay(6000);
+  delay(6000);
+
+  Serial.print("After change:   KP  ");
+  Serial.print(sensors.tempKp, 4);
+  Serial.print("   KD  ");
+  Serial.print(sensors.tempKd, 4);
 
   // Serial.print("After change:  FWD KP  ");
   // Serial.print(motors.fwdKp, 4);
@@ -62,29 +67,53 @@ void setup()
 
 void loop()
 {
-  // motion.start_move(300, 400, 0, 500);
-  // while (!motion.move_finished())
-  // {
-  //   encoders.update();
-  //   motion.update();
-  //   sensors.update();
-  //   motors.update(motion.velocity(), motion.omega());
+//   motion.reset_drive_system();
+//   motion.start_move(-70, 200, 0, 1000);
+//   while (!motion.move_finished())
+//   {
+//     encoders.update();
+//     motion.update();
+//     sensors.update();
+//     motors.update(motion.velocity(), motion.omega(), sensors.get_steering_feedback());
 
-  //   reporter.send(encoders.robot_speed(), encoders.robot_omega());
-  // }
+//     reporter.send();
+//   }
 
-  // motion.reset_drive_system();
-  // motion.start_turn(90, 360, 0, 120);
+//   motion.reset_drive_system();
 
-  // while (!motion.turn_finished())
-  // {
-  //   encoders.update();
-  //   motion.update();
-  //   sensors.update();
-  //   motors.update(motion.velocity(), motion.omega());
+//   motion.start_move(720, 200, 0, 1000);
+//   while (!motion.move_finished())
+//   {
+//     encoders.update();
+//     motion.update();
+//     sensors.update();
+//     motors.update(motion.velocity(), motion.omega(), sensors.get_steering_feedback());
 
-  //   reporter.send(encoders.robot_speed(), encoders.robot_omega());
-  // }
+//     reporter.send();
+//   }
+
+//   motion.reset_drive_system();
+//   motion.start_turn(180, 400, 0, 1000);
+
+//   while (!motion.turn_finished())
+//   {
+//     encoders.update();
+//     motion.update();
+//     sensors.update();
+//     motors.update(motion.velocity(), motion.omega(), sensors.get_steering_feedback());
+
+//     reporter.send();
+//   }
+
+// int t = millis();
+// while (millis()-t < 2000){
+//   encoders.update();
+//   motion.update();
+//   sensors.update();
+//   motors.update(0,0,0);
+// }
+  sensors.update();
+  reporter.send();
   // while (millis() % 20000 < 10000)
   // {
   //   encoders.update();
@@ -100,15 +129,24 @@ void loop()
   //   delay(2);
   //   reporter.send(encoders.robot_speed(), encoders.robot_omega());
   // }
-  sensors.update();
-  int *tofReadings = sensors.getToFReadings();
 
-  Serial.print("Left : ");
-  Serial.print(tofReadings[0]);
-  Serial.print("  Left Center : ");
-  Serial.print(tofReadings[1]);
-  Serial.print("  Right Center: ");
-  Serial.print(tofReadings[2]);
-  Serial.print("  Right : ");
-  Serial.println(tofReadings[3]);
+  // Serial.print("Left:");
+  // Serial.print(sensors.left_tof);
+
+  // Serial.print(",");
+  // Serial.print("LeftCenter:");
+  // Serial.print(sensors.center_left_tof);
+  // Serial.print(",");
+  // Serial.print("RightCenter:");
+  // Serial.print(sensors.center_right_tof);
+
+  // Serial.print(",");
+  // Serial.print("Right:");
+  // Serial.print(sensors.right_tof);
+  // Serial.print(",");
+  // Serial.print("Steering:");
+  // Serial.print(sensors.get_cross_track_error());
+  // Serial.print(",");
+  // Serial.print("Steering:");
+  // Serial.println(sensors.get_steering_feedback());
 }

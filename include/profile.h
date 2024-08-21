@@ -75,9 +75,7 @@ public:
         wait_until_finished();
     }
 
-    /// @brief causes the profile to immediately terminate with the speed to zero
-    ///        note that even when the state is PS_FINISHED, the profiler will
-    ///        continue to try and reach the target speed. (zero in this case)
+
     void stop()
     {
         noInterrupts();
@@ -86,7 +84,6 @@ public:
         finish();
     }
 
-    /// @brief  Force a profile to finish with the target speed set to the final speed
     void finish()
     {
         noInterrupts();
@@ -147,6 +144,7 @@ public:
         m_speed = speed;
         interrupts();
     }
+
     void set_target_speed(float speed)
     {
         noInterrupts();
@@ -154,7 +152,7 @@ public:
         interrupts();
     }
 
-    // normally only used to alter position for forward error correction
+    // only used to alter position for forward error correction
     void adjust_position(float adjustment)
     {
         noInterrupts();
@@ -184,7 +182,7 @@ public:
                 m_state = PS_BRAKING;
                 if (m_final_speed == 0)
                 {
-                    m_target_speed = m_sign * 5.0f; // magic number to make sure we reach zero
+                    m_target_speed = m_sign * 30.0f; // magic number to make sure we reach zero
                 }
                 else
                 {
@@ -192,6 +190,7 @@ public:
                 };
             }
         }
+        
         // try to reach the target speed
         if (m_speed < m_target_speed)
         {
