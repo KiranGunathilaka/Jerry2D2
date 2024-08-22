@@ -20,7 +20,6 @@ const int SDA_pin = 23;
 
 const int ToF_XSHUT_Right =5;
 const int ToF_XSHUT_Center =18;
-//const int ToF_XSHUT_CenLeft = 21;
 const int ToF_XSHUT_Left = 19;
 
 #define LSM6DS3_ADDRESS 0x6B // I2C address of LSM6DS3
@@ -34,8 +33,7 @@ const int ToF_XSHUT_Left = 19;
 //custom i2c addresses
 #define TOF_RIGHT_ADD 0x30
 #define TOF_CENTER_ADD 0x31
-//#define TOF_CENLEFT_ADD 0x32
-#define TOF_LEFT_ADD 0x33
+#define TOF_LEFT_ADD 0x32
 
 const float g = 9.80665; //ms^-1
 const float gyroSensitivity = 0.0175; //for dps
@@ -50,7 +48,7 @@ const float centerOffsetY = -2.08;
 
 const float RIGHT_DISTANCE_THRESHOLD = 80.0; //in mm
 const float LEFT_DISTANCE_THRESHOLD = 80.0; //in mm
-const float FRONT_THRESHOLD = 100.0; //in mm
+const float FRONT_THRESHOLD = 130.0; //in mm
 const float SIDE_DISTANCE = 55.0;
 
 const float STEERING_KP = 0.8;
@@ -106,6 +104,11 @@ const float FWD_KD = 0.64;
 const float ROT_KP = 1.3;
 const float ROT_KD = 1.2;
 
+const float FWD_KP_SMALL = 0.01;
+const float FWD_KD_SMALL = 0.9;
+const float ROT_KP_SMALL = 0.25;
+const float ROT_KD_SMALL = 3;
+
 //**************************************************REPORTING CONFIG**************************************************************************
 uint8_t broadcastAddress[] = { 0xEC, 0xDA, 0x3B, 0x51, 0xA5, 0x84 }; // RECEIVER MAC Address
 
@@ -113,21 +116,19 @@ uint8_t broadcastAddress[] = { 0xEC, 0xDA, 0x3B, 0x51, 0xA5, 0x84 }; // RECEIVER
 
 const int FULL_CELL = 180; //in mm
 const int HALF_CELL = 90;
-const int FRONT_REFERENCE = 200; // sum of the distance readings when mouse positioned centered in a cell before a front wall
+const int INITIAL_OFFSET_FROM_CENTER = 45;
+const int STOP_DISTANCE = 150; // sum of the distance readings when mouse positioned centered in a cell before a front wall
 
 const int OMEGA_SPIN_TURN = 360;
 const int ALPHA_SPIN_TURN = 3600;
 
-const int SEARCH_TURN_SPEED= 300;
+const int SEARCH_SPEED= 250;
+const int SEARCH_ACCELERATION = 1000;
 
 const int EXTRA_WALL_ADJUST = 12; //wall thickness
 
-//the position where the sensors are supposed to get readings if IR sensors were used
-//need to update what do to when using ToF
-const float SENSING_POSITION = 170.0;
-
-const int SEARCH_SPEED = 300;
-const int SEARCH_ACCELERATION = 1000;
+const int ERROR_CORRECTION_OMEGA = 100;
+const int ERROR_CORRECTION_ALPHA = 1000;
 
 const int BACK_WALL_TO_CENTER = 0; //distance that need to be travelled to go to the center when robot is against the backwall
 
@@ -141,10 +142,7 @@ struct TurnParameters {
   int trigger;       //         - front sensor value at start of turn
 };
 
-// const TurnParameters turn_params[4] = {
-//     //           speed, entry,   exit, angle, omega,  alpha, sensor threshold
-//     {SEARCH_TURN_SPEED,    70,     80,  90.0, 287.0, 2866.0, TURN_THRESHOLD_SS90E}, // 0 => SS90EL
-//     {SEARCH_TURN_SPEED,    70,     80, -90.0, 287.0, 2866.0, TURN_THRESHOLD_SS90E}, // 0 => SS90ER
-//     {SEARCH_TURN_SPEED,    70,     80,  90.0, 287.0, 2866.0, TURN_THRESHOLD_SS90E}, // 0 => SS90L
-//     {SEARCH_TURN_SPEED,    70,     80, -90.0, 287.0, 2866.0, TURN_THRESHOLD_SS90E}, // 0 => SS90R
-// };
+#define TARGET1 Location(7,7)
+#define TARGET2 Location(8,7)
+#define TARGET3 Location(7,8)
+#define TARGET4 Location(8,8)

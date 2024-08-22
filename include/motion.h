@@ -7,10 +7,11 @@
 class Motion;
 extern Motion motion;
 
-class Motion {
- public:
-
-  void reset_drive_system() {
+class Motion
+{
+public:
+  void reset_drive_system()
+  {
     motors.stop();
     motors.disable_controllers();
     encoders.reset();
@@ -20,93 +21,130 @@ class Motion {
     motors.enable_controllers();
   }
 
-  void stop() {
+  void stop()
+  {
     motors.stop();
   }
 
-  void disable_drive() {
+  void disable_drive()
+  {
     motors.disable_controllers();
   }
 
-  float position() {
+  float position()
+  {
     return forward.position();
   }
 
-  float velocity() {
+  float velocity()
+  {
     return forward.speed();
   }
 
-  float acceleration() {
+  float acceleration()
+  {
     return forward.acceleration();
   }
 
-  void set_target_velocity(float velocity) {
+  void set_target_velocity(float velocity)
+  {
     forward.set_target_speed(velocity);
   }
 
-  float angle() {
+  float angle()
+  {
     return rotation.position();
   }
 
-  float omega() {
+  float omega()
+  {
     return rotation.speed();
   }
 
-  float alpha() {
+  float alpha()
+  {
     return rotation.acceleration();
   }
 
-  void start_move(float distance, float top_speed, float final_speed, float acceleration) {
+  void start_move(float distance, float top_speed, float final_speed, float acceleration)
+  {
     forward.start(distance, top_speed, final_speed, acceleration);
   }
 
-  bool move_finished() {
+  bool move_finished()
+  {
     return forward.is_finished();
   }
 
-  void move(float distance, float top_speed, float final_speed, float acceleration) {
+  void move(float distance, float top_speed, float final_speed, float acceleration)
+  {
     forward.move(distance, top_speed, final_speed, acceleration);
   }
 
-  void start_turn(float distance, float top_speed, float final_speed, float acceleration) {
+  void start_turn(float distance, float top_speed, float final_speed, float acceleration)
+  {
     rotation.start(distance, top_speed, final_speed, acceleration);
   }
 
-  bool turn_finished() {
+  bool turn_finished()
+  {
     return rotation.is_finished();
   }
 
-  void turn(float distance, float top_speed, float final_speed, float acceleration) {
+  void turn(float distance, float top_speed, float final_speed, float acceleration)
+  {
     rotation.move(distance, top_speed, final_speed, acceleration);
   }
 
-  void update() {
+  void update()
+  {
     forward.update();
     rotation.update();
   }
 
-  void set_position(float pos) {
+  void set_position(float pos)
+  {
     forward.set_position(pos);
   }
 
-  void adjust_forward_position(float delta) {
+  void adjust_forward_position(float delta)
+  {
     forward.adjust_position(delta);
   }
 
   //***************************************************************************//
 
-  void turn(float angle, float omega, float alpha) {
+  void turn(float angle, float omega, float alpha)
+  {
     // get ready to turn
     rotation.reset();
     rotation.move(angle, omega, 0, alpha);
   }
 
-  void spin_turn(float angle, float omega, float alpha) {
-    forward.set_target_speed(0);
-    while (forward.speed() != 0) {
+
+  //****************************************************************************//
+  void stop_at(float position)
+  {
+    float remaining = position - forward.position();
+    forward.move(remaining, forward.speed(), 0, forward.acceleration());
+  }
+
+  void stop_after(float distance)
+  {
+    forward.move(distance, forward.speed(), 0, forward.acceleration());
+  }
+
+  void wait_until_position(float position)
+  {
+    while (forward.position() < position)
+    {
       delay(2);
     }
-    turn(angle, omega, alpha);
-  };
+  }
 
+  void wait_until_distance(float distance)
+  {
+    float target = forward.position() + distance;
+    wait_until_position(target);
+  }
 };

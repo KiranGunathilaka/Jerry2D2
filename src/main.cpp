@@ -6,6 +6,7 @@
 #include "config.h"
 #include "motion.h"
 #include "profile.h"
+#include "mouse.h"
 
 Encoders encoders;
 Motors motors;
@@ -14,6 +15,8 @@ Reporting reporter;
 Profile forward;
 Profile rotation;
 Motion motion;
+Mouse mouse;
+Maze maze;
 
 Reporting *Reporting::instance = nullptr; // Initialize the static member
 
@@ -28,6 +31,7 @@ void setup()
   motors.begin();
   sensors.begin();
   reporter.begin();
+  mouse.init();
 
   motion.reset_drive_system();
 
@@ -67,62 +71,71 @@ void setup()
 
 void loop()
 { 
-  motion.reset_drive_system();
-  sensors.set_steering_mode(STEER_NORMAL);
-  int i = 0;
-  while (i < 5)
-  {
-    motion.start_move(180, 400, 0, 1000);
-    while (!motion.move_finished())
-    {
-      encoders.update();
-      motion.update();
-      sensors.update();
-      motors.update(motion.velocity(), motion.omega(), sensors.get_steering_feedback());
-      reporter.send();
-    }
-    i++;
-    motors.stop();
-  }
+  // mouse.search();
+  //sensors.update();
+  // Serial.print(sensors.right_tof);
+  // Serial.print(" center  ");
+  // Serial.print(sensors.center_tof);
+  // Serial.print(" left  ");
+  // Serial.println(sensors.left_tof);
+  // sensors.update();
+  // motion.reset_drive_system();
+  // //sensors.set_steering_mode(STEER_NORMAL);
+  // int i = 0;
+  // while (i < 20)
+  // {
+  //   motion.start_turn(18, 100, 0, 1000);
+  //   while (!motion.turn_finished())
+  //   {
+  //     encoders.update();
+  //     motion.update();
+  //     sensors.update();
+  //     motors.update(motion.velocity(), motion.omega());
+  //     reporter.send();
+  //   }
+  //   i++;
+  //   motors.stop();
+    
+  // }
+
 
   motion.reset_drive_system();
-  sensors.set_steering_mode(STEERING_OFF);
   motion.start_turn(90, 360, 0, 3600);
   while (!motion.turn_finished())
   {
     encoders.update();
     motion.update();
     sensors.update();
-    motors.update(motion.velocity(), motion.omega(), sensors.get_steering_feedback());
+    motors.update(motion.velocity(), motion.omega());
 
     reporter.send();
   }
   motors.stop();
 
   motion.reset_drive_system();
-  sensors.set_steering_mode(STEER_NORMAL);
   motion.start_move(180, 400, 0, 1000);
   while (!motion.move_finished())
   {
     encoders.update();
     motion.update();
     sensors.update();
-    motors.update(motion.velocity(), motion.omega(), sensors.get_steering_feedback());
+    motors.update(motion.velocity(), motion.omega());
     reporter.send();
   }
   motors.stop();
 
   motion.reset_drive_system();
-  sensors.set_steering_mode(STEERING_OFF);
+ 
   motion.start_turn(90, 360, 0, 3600);
   while (!motion.turn_finished())
   {
     encoders.update();
     motion.update();
     sensors.update();
-    motors.update(motion.velocity(), motion.omega(), sensors.get_steering_feedback());
+    motors.update(motion.velocity(), motion.omega());
 
     reporter.send();
   }
   motors.stop();
+
 }

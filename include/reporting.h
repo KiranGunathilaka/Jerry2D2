@@ -52,25 +52,25 @@ public:
         {
             memcpy(&instance->command, incomingData, sizeof(instance->command));
             
-            // Serial.print("FWD KP  ");
-            // motors.fwdKp = instance->command.fwdKp;
-            // Serial.print(motors.fwdKp);
-            // Serial.print("  FWD KD  ");
-            // Serial.print(motors.fwdKd);
-            // motors.fwdKd = instance->command.fwdKd;
-            // Serial.print("  ROT KP  ");
-            // Serial.print(motors.rotKp);
-            // motors.rotKp = instance->command.rotKp;
-            // Serial.print("  ROT KD  ");
-            // Serial.print(motors.rotKd);
-            // motors.rotKd = instance->command.rotKd;
+            Serial.print("FWD KP  ");
+            motors.fwdKp = instance->command.fwdKp;
+            Serial.print(motors.fwdKp);
+            Serial.print("  FWD KD  ");
+            Serial.print(motors.fwdKd);
+            motors.fwdKd = instance->command.fwdKd;
+            Serial.print("  ROT KP  ");
+            Serial.print(motors.rotKp);
+            motors.rotKp = instance->command.rotKp;
+            Serial.print("  ROT KD  ");
+            Serial.print(motors.rotKd);
+            motors.rotKd = instance->command.rotKd;
 
-            Serial.print("Steer KP  ");
-            Serial.print(sensors.tempKp);
-            sensors.tempKp = instance->command.steeringKp;
-            Serial.print("  steer KD  ");
-            Serial.print(sensors.tempKd);
-            sensors.tempKd = instance->command.steeringKd;
+            // Serial.print("Steer KP  ");
+            // Serial.print(sensors.tempKp);
+            // sensors.tempKp = instance->command.steeringKp;
+            // Serial.print("  steer KD  ");
+            // Serial.print(sensors.tempKd);
+            // sensors.tempKd = instance->command.steeringKd;
 
             instance->speed = instance->command.speed;
             instance->omega = instance->command.omega;
