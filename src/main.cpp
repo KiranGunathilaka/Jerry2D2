@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include "Ticker.h"
 #include "encoders.h"
 #include "motors.h"
 #include "sensors.h"
@@ -21,6 +22,7 @@ Maze maze;
 Reporting *Reporting::instance = nullptr; // Initialize the static member
 
 int omega, speed;
+Ticker sendTicker;
 
 void setup()
 {
@@ -31,9 +33,12 @@ void setup()
   motors.begin();
   sensors.begin();
   reporter.begin();
+  maze.initialise();
   mouse.init();
+  maze.set_goal(TARGET);
 
-  motion.reset_drive_system();
+  // Set up a timer to call reporter.send() every 500ms (or any other interval)
+  sendTicker.attach(0.015, []()  { reporter.send(); });
 
   // Serial.print("Before change:   KP  ");
   // Serial.print(sensors.tempKp, 4);
@@ -70,11 +75,17 @@ void setup()
 }
 
 void loop()
-{ 
-  mouse.search();
-  //motors.update(250, 0);
+{
+  //mouse.search();
+
+  // motion.reset_drive_system();
+  // motion.start_move(180,SEARCH_SPEED, 0 ,SEARCH_ACCELERATION);
+  // while(!motion.move_finished()){
+  //   mouse.update_mouse();
+  // }
+  // motors.update(250, 0);
   // mouse.search();
-  //sensors.update();
+  // sensors.update();
   // Serial.print(sensors.right_tof);
   // Serial.print(" center  ");
   // Serial.print(sensors.center_tof);
@@ -97,47 +108,71 @@ void loop()
   //   }
   //   i++;
   //   motors.stop();
-    
+
   // }
 
+//   motion.reset_drive_system();
+//   motion.start_move(-90, 300, 0, 1000);
+//   while (!motion.move_finished())
+//   {
+//     encoders.update();
+//     motion.update();
+//     sensors.update();
+//     motors.update(motion.velocity(), motion.omega());
 
-  // motion.reset_drive_system();
-  // motion.start_turn(90, 360, 0, 3600);
-  // while (!motion.turn_finished())
-  // {
-  //   encoders.update();
-  //   motion.update();
-  //   sensors.update();
-  //   motors.update(motion.velocity(), motion.omega());
+//     reporter.send();
+//   }
+// for ( int i = 0; i < 5; i++)
+// {
+//   motion.reset_drive_system();
+//   motion.start_move(180, 300, 0, 1000);
+//   while (!motion.move_finished())
+//   {
+//     encoders.update();
+//     motion.update();
+//     sensors.update();
+//     motors.update(motion.velocity(), motion.omega());
 
-  //   reporter.send();
-  // }
-  // motors.stop();
+//     reporter.send();
+//   }
+// }
+// for ( int i = 0; i < 2; i++)
+// {
+//   motion.reset_drive_system();
+//   motion.start_turn(90, 360, 0, 3600);
+//   while (!motion.turn_finished())
+//   {
+//     encoders.update();
+//     motion.update();
+//     sensors.update();
+//     motors.update(motion.velocity(), motion.omega());
 
-  // motion.reset_drive_system();
-  // motion.start_move(180, 400, 0, 1000);
-  // while (!motion.move_finished())
-  // {
-  //   encoders.update();
-  //   motion.update();
-  //   sensors.update();
-  //   motors.update(motion.velocity(), motion.omega());
-  //   reporter.send();
-  // }
-  // motors.stop();
+//     reporter.send();
+//   }
+// }
 
-  // motion.reset_drive_system();
- 
-  // motion.start_turn(90, 360, 0, 3600);
-  // while (!motion.turn_finished())
-  // {
-  //   encoders.update();
-  //   motion.update();
-  //   sensors.update();
-  //   motors.update(motion.velocity(), motion.omega());
+//   motion.reset_drive_system();
+//   motion.start_move(-90, 300, 0, 1000);
+//   while (!motion.move_finished())
+//   {
+//     encoders.update();
+//     motion.update();
+//     sensors.update();
+//     motors.update(motion.velocity(), motion.omega());
 
-  //   reporter.send();
-  // }
-  // motors.stop();
+//     reporter.send();
+//   }
+
+// for ( int i = 0; i < 4; i++)
+// {
+//   motion.reset_drive_system();
+//   motion.start_move(180, 300, 0, 1000);
+//   while (!motion.move_finished())
+//   {
+//     encoders.update();
+//     motion.update();
+//     sensors.update();
+//     motors.update(motion.velocity(), motion.omega());
+
 
 }

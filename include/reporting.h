@@ -2,11 +2,11 @@
 #include <esp_now.h>
 #include <WiFi.h>
 #include <config.h>
+#include "mouse.h"
 
 class Reporting;
 
 extern Reporting reporter;
-
 
 class Reporting
 {
@@ -20,8 +20,12 @@ public:
         bool front;
         bool left;
         bool right;
-        float error;
-        float feedback;
+        float distance;
+        float angle;
+        int currentCellX;
+        int currentCellY;
+        int nextCellX;
+        int nextCellY;
     } sendData;
 
     typedef struct receiveData
@@ -51,7 +55,7 @@ public:
         if (instance)
         {
             memcpy(&instance->command, incomingData, sizeof(instance->command));
-            
+
             Serial.print("FWD KP  ");
             motors.fwdKp = instance->command.fwdKp;
             Serial.print(motors.fwdKp);
@@ -117,8 +121,12 @@ public:
         transmitData.front = sensors.frontWallExist;
         transmitData.right = sensors.rightWallExist;
         transmitData.left = sensors.leftWallExist;
-        transmitData.error = sensors.get_cross_track_error();
-        transmitData.feedback = sensors.get_steering_feedback();
+        transmitData.distance = encoders.robotAngle();
+        transmitData.angle = encoders.robotDistance();
+        transmitData.currentCellX = (int)mouse.getNowLocation().x;
+        transmitData.currentCellX = (int)mouse.getNowLocation().y;
+        transmitData.nextCellX = (int)mouse.getNextLocation().x;
+        transmitData.nextCellX = (int)mouse.getNextLocation().y;
         // Send message via ESP-NOW
         esp_now_send(broadcastAddress, (uint8_t *)&transmitData, sizeof(transmitData));
     }

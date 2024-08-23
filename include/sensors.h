@@ -98,9 +98,9 @@ public:
         // Magnetometer initialization
         magDetect = mag.begin();
 
-        sensors.update();
-        heading_north = getMagReadings();
-        Serial.println(heading_north);
+        // sensors.update();
+        // heading_north = getMagReadings();
+        // Serial.println(heading_north);
     }
 
     float get_steering_feedback()
@@ -153,18 +153,6 @@ public:
             direction += 360;
         }
     }
-
-    // float calculate_steering_adjustment()
-    // {
-    //     // always calculate the adjustment for testing. It may not get used.
-    //     float pTerm = tempKp * cross_track_error;
-    //     float dTerm = tempKd * (cross_track_error - last_steering_error);
-    //     float adjustment = (pTerm + dTerm) * encoders.loopTime_s();
-    //     adjustment = constrain(adjustment, -STEERING_ADJUST_LIMIT, STEERING_ADJUST_LIMIT);
-    //     last_steering_error = cross_track_error;
-    //     steering_adjustment = adjustment;
-    //     return adjustment;
-    // }
 
     // getting LSM6DS3 readings
     float *getGyroReadings()

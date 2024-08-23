@@ -76,7 +76,7 @@ const bool WIFI_ENABLE = true;
 //***************************************************MOTOR CONFIG***************************************************************************/
 //Left and Right Motor configurations
 const float MAX_MOTOR_PERCENTAGE = 90;
-const int MIN_MOTOR_PERCENTAGE = 15; // when the given percentage is below this value, percentage is set to zero to damp oscillations
+const int MIN_MOTOR_PERCENTAGE = 5; // when the given percentage is below this value, percentage is set to zero to damp oscillations
 const int MIN_MOTOR_BIAS = 10;// miinimum percentage that should be given for the motors to spin
 const int PWM_RESOLUTION_BITS = 8;
 const int PWM_RESOLUTION = 256; //2^8 use a suitable code to automate this
@@ -99,22 +99,23 @@ const int RIGHT_MOTOR_PWM = 13;
 #define MOTOR_RIGHT_POLARITY (1)
 
 //PD parameters  
-const float FWD_KP = 0.01;
+const float FWD_KP_ = 0.01;
 const float FWD_KD = 0.64;
 const float ROT_KP = 1.3;
 const float ROT_KD = 1.2;
 
-const float FWD_KP_SMALL = 0.01;
+const float FWD_KP_SMALL = 0.5;    
 const float FWD_KD_SMALL = 0.9;
-const float ROT_KP_SMALL = 0.25;
-const float ROT_KD_SMALL = 3;
+
+const float ROT_KP_90 = 2.4;   // measured for(90,360,0,3600)   @7.4V battery
+const float ROT_KD_90 = 3;
 
 //**************************************************REPORTING CONFIG**************************************************************************
 uint8_t broadcastAddress[] = { 0xEC, 0xDA, 0x3B, 0x51, 0xA5, 0x84 }; // RECEIVER MAC Address
 
 //**************************************************MOUSE CONFIG****************************************************************************
 
-const int FULL_CELL = 180; //in mm
+const int FULL_CELL = 210; //in mm
 const int HALF_CELL = 90;
 const int INITIAL_OFFSET_FROM_CENTER = 45;
 const int STOP_DISTANCE = 150; // sum of the distance readings when mouse positioned centered in a cell before a front wall
@@ -122,7 +123,7 @@ const int STOP_DISTANCE = 150; // sum of the distance readings when mouse positi
 const int OMEGA_SPIN_TURN = 360;
 const int ALPHA_SPIN_TURN = 3600;
 
-const int SEARCH_SPEED= 250;
+const int SEARCH_SPEED= 300;
 const int SEARCH_ACCELERATION = 1000;
 
 const int EXTRA_WALL_ADJUST = 12; //wall thickness

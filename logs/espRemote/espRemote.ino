@@ -36,13 +36,17 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
 }
 
 typedef struct receiveData {
-  float speed;
-  float omega;
+  float speedData;
+  float omegaData;
   bool front;
   bool left;
   bool right;
-  float error;
-  float feedback;
+  float distance;
+  float angle;
+  int currentCellX;
+  int currentCellY;
+  int nextCellX;
+  int nextCellY;
 } receiveData;
 
 receiveData received;
@@ -50,9 +54,9 @@ receiveData received;
 // callback function that will be executed when data is received
 void OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len) {
   memcpy(&received, incomingData, sizeof(received));
-  Serial.print(received.speed);
+  Serial.print(received.speedData);
   Serial.print(",");
-  Serial.print(received.omega);
+  Serial.print(received.omegaData);
   Serial.print(",");
   Serial.print(received.front ? 1 : 0);
   Serial.print(",");
@@ -60,9 +64,17 @@ void OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len) {
   Serial.print(",");
   Serial.print(received.right ? 1 : 0);
   Serial.print(",");
-  Serial.print(received.error);
+  Serial.print(received.distance);
   Serial.print(",");
-  Serial.println(received.feedback);
+  Serial.print(received.angle);
+  Serial.print(",");
+  Serial.print(received.currentCellX);
+  Serial.print(",");
+  Serial.print(received.currentCellY);
+  Serial.print(",");
+  Serial.print(received.nextCellX);
+  Serial.print(",");
+  Serial.println(received.nextCellY);
 }
 
 void setup() {
