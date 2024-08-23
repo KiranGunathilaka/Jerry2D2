@@ -40,137 +40,16 @@ void setup()
   // Set up a timer to call reporter.send() every 500ms (or any other interval)
   //sendTicker.attach(0.015, []()  { reporter.send(); });
 
-  // Serial.print("Before change:   KP  ");
-  // Serial.print(sensors.tempKp, 4);
-  // Serial.print("   KD  ");
-  // Serial.print(sensors.tempKd, 4);
-  // // Serial.print("  ROT KP  ");
-  // // Serial.print(motors.rotKp, 4);
-  // // Serial.print("  ROT KD  ");
-  // // Serial.println(motors.rotKd, 4);
-
-  // delay(6000);
-
-  // Serial.print("After change:   KP  ");
-  // Serial.print(sensors.tempKp, 4);
-  // Serial.print("   KD  ");
-  // Serial.print(sensors.tempKd, 4);
-
-  // Serial.print("After change:  FWD KP  ");
-  // Serial.print(motors.fwdKp, 4);
-  // Serial.print("  FWD KD  ");
-  // Serial.print(motors.fwdKd, 4);
-  // Serial.print("  ROT KP  ");
-  // Serial.print(motors.rotKp, 4);
-  // Serial.print("  ROT KD  ");
-  // Serial.println(motors.rotKd, 4);
-
-  // speed = reporter.speed;
-  // omega = reporter.omega;
-
-  // Serial.print("Speed   ");
-  // Serial.print(speed);
-  // Serial.print("   omega  ");
-  // Serial.println(omega);
+ 
 }
 
 void loop()
 {
-  //mouse.search();
+  mouse.search();
 
-  // motion.reset_drive_system();
-  // motion.start_move(180,SEARCH_SPEED, 0 ,SEARCH_ACCELERATION);
-  // while(!motion.move_finished()){
-  //   mouse.update_mouse();
-  // }
-  // motors.update(250, 0);
-  // mouse.search();
-  // sensors.update();
-  // Serial.print(sensors.right_tof);
-  // Serial.print(" center  ");
-  // Serial.print(sensors.center_tof);
-  // Serial.print(" left  ");
-  // Serial.println(sensors.left_tof);
-  // sensors.update();
-  // motion.reset_drive_system();
-  // //sensors.set_steering_mode(STEER_NORMAL);
-  // int i = 0;
-  // while (i < 20)
-  // {
-  //   motion.start_turn(18, 100, 0, 1000);
-  //   while (!motion.turn_finished())
-  //   {
-  //     encoders.update();
-  //     motion.update();
-  //     sensors.update();
-  //     motors.update(motion.velocity(), motion.omega());
-  //     reporter.send();
-  //   }
-  //   i++;
-  //   motors.stop();
-
-  // }
-
-//   motion.reset_drive_system();
-//   motion.start_move(-90, 300, 0, 1000);
-//   while (!motion.move_finished())
-//   {
-//     encoders.update();
-//     motion.update();
-//     sensors.update();
-//     motors.update(motion.velocity(), motion.omega());
-
-//     reporter.send();
-//   }
-// for ( int i = 0; i < 5; i++)
-// {
-//   motion.reset_drive_system();
-//   motion.start_move(180, 300, 0, 1000);
-//   while (!motion.move_finished())
-//   {
-//     encoders.update();
-//     motion.update();
-//     sensors.update();
-//     motors.update(motion.velocity(), motion.omega());
-
-//     reporter.send();
-//   }
-// }
-  motion.reset_drive_system();
-  motion.start_turn(90, 180, 0, 3600);
-  while (!motion.turn_finished())
-  {
-    encoders.update();
-    motion.update();
-    sensors.update();
-    motors.update(motion.velocity(), motion.omega());
-
-    reporter.send();
+  while(true){
+    
   }
-
-  motion.set_target_velocity(0);
-
-  motion.reset_drive_system();
-  motion.start_move(-90, 180, 0, 1000);
-  while (!motion.move_finished())
-  {
-    encoders.update();
-    motion.update();
-    sensors.update();
-    motors.update(motion.velocity(), motion.omega());
-
-    reporter.send();
-  }
-// for ( int i = 0; i < 4; i++)
-// {
-//   motion.reset_drive_system();
-//   motion.start_move(180, 300, 0, 1000);
-//   while (!motion.move_finished())
-//   {
-//     encoders.update();
-//     motion.update();
-//     sensors.update();
-//     motors.update(motion.velocity(), motion.omega());
 
 
 }

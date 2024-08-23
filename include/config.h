@@ -115,15 +115,15 @@ uint8_t broadcastAddress[] = { 0xEC, 0xDA, 0x3B, 0x51, 0xA5, 0x84 }; // RECEIVER
 
 //**************************************************MOUSE CONFIG****************************************************************************
 
-const int FULL_CELL = 210; //in mm
+const int FULL_CELL = 180; //in mm
 const int HALF_CELL = 90;
 const int INITIAL_OFFSET_FROM_CENTER = 45;
-const int STOP_DISTANCE = 150; // sum of the distance readings when mouse positioned centered in a cell before a front wall
+const int STOP_DISTANCE = 120; // sum of the distance readings when mouse positioned centered in a cell before a front wall
 
 const int OMEGA_SPIN_TURN = 360;
 const int ALPHA_SPIN_TURN = 3600;
 
-const int SEARCH_SPEED= 300;
+const int SEARCH_SPEED= 180;
 const int SEARCH_ACCELERATION = 1000;
 
 const int EXTRA_WALL_ADJUST = 12; //wall thickness
@@ -133,19 +133,11 @@ const int ERROR_CORRECTION_ALPHA = 1000;
 
 const int BACK_WALL_TO_CENTER = 0; //distance that need to be travelled to go to the center when robot is against the backwall
 
-struct TurnParameters {
-  int speed;         // mm/s    - constant forward speed during turn
-  int entry_offset;  // mm      - distance from turn pivot to turn start
-  int exit_offset;   // mm      - distance from turn pivot to turn end
-  float angle;       // deg     - total turn angle
-  float omega;       // deg/s   - maximum angular velocity
-  float alpha;       // deg/s/s - angular acceleration
-  int trigger;       //         - front sensor value at start of turn
-};
 
-#define TARGET Location(7,7)
-#define MAZE_WIDTH 16
-#define MAZE_HEIGHT 16
+
+#define TARGET Location(2,2)
+#define MAZE_WIDTH 5
+#define MAZE_HEIGHT 5
 #define MAZE_CELL_COUNT (MAZE_WIDTH * MAZE_HEIGHT)
 #define MAX_COST (MAZE_CELL_COUNT - 1)
 
