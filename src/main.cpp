@@ -38,7 +38,7 @@ void setup()
   maze.set_goal(TARGET);
 
   // Set up a timer to call reporter.send() every 500ms (or any other interval)
-  sendTicker.attach(0.015, []()  { reporter.send(); });
+  //sendTicker.attach(0.015, []()  { reporter.send(); });
 
   // Serial.print("Before change:   KP  ");
   // Serial.print(sensors.tempKp, 4);
@@ -136,33 +136,31 @@ void loop()
 //     reporter.send();
 //   }
 // }
-// for ( int i = 0; i < 2; i++)
-// {
-//   motion.reset_drive_system();
-//   motion.start_turn(90, 360, 0, 3600);
-//   while (!motion.turn_finished())
-//   {
-//     encoders.update();
-//     motion.update();
-//     sensors.update();
-//     motors.update(motion.velocity(), motion.omega());
+  motion.reset_drive_system();
+  motion.start_turn(90, 180, 0, 3600);
+  while (!motion.turn_finished())
+  {
+    encoders.update();
+    motion.update();
+    sensors.update();
+    motors.update(motion.velocity(), motion.omega());
 
-//     reporter.send();
-//   }
-// }
+    reporter.send();
+  }
 
-//   motion.reset_drive_system();
-//   motion.start_move(-90, 300, 0, 1000);
-//   while (!motion.move_finished())
-//   {
-//     encoders.update();
-//     motion.update();
-//     sensors.update();
-//     motors.update(motion.velocity(), motion.omega());
+  motion.set_target_velocity(0);
 
-//     reporter.send();
-//   }
+  motion.reset_drive_system();
+  motion.start_move(-90, 180, 0, 1000);
+  while (!motion.move_finished())
+  {
+    encoders.update();
+    motion.update();
+    sensors.update();
+    motors.update(motion.velocity(), motion.omega());
 
+    reporter.send();
+  }
 // for ( int i = 0; i < 4; i++)
 // {
 //   motion.reset_drive_system();
