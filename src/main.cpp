@@ -71,6 +71,8 @@ void setup()
 
 void loop()
 { 
+  mouse.search();
+  //motors.update(250, 0);
   // mouse.search();
   //sensors.update();
   // Serial.print(sensors.right_tof);
@@ -99,43 +101,43 @@ void loop()
   // }
 
 
-  motion.reset_drive_system();
-  motion.start_turn(90, 360, 0, 3600);
-  while (!motion.turn_finished())
-  {
-    encoders.update();
-    motion.update();
-    sensors.update();
-    motors.update(motion.velocity(), motion.omega());
+  // motion.reset_drive_system();
+  // motion.start_turn(90, 360, 0, 3600);
+  // while (!motion.turn_finished())
+  // {
+  //   encoders.update();
+  //   motion.update();
+  //   sensors.update();
+  //   motors.update(motion.velocity(), motion.omega());
 
-    reporter.send();
-  }
-  motors.stop();
+  //   reporter.send();
+  // }
+  // motors.stop();
 
-  motion.reset_drive_system();
-  motion.start_move(180, 400, 0, 1000);
-  while (!motion.move_finished())
-  {
-    encoders.update();
-    motion.update();
-    sensors.update();
-    motors.update(motion.velocity(), motion.omega());
-    reporter.send();
-  }
-  motors.stop();
+  // motion.reset_drive_system();
+  // motion.start_move(180, 400, 0, 1000);
+  // while (!motion.move_finished())
+  // {
+  //   encoders.update();
+  //   motion.update();
+  //   sensors.update();
+  //   motors.update(motion.velocity(), motion.omega());
+  //   reporter.send();
+  // }
+  // motors.stop();
 
-  motion.reset_drive_system();
+  // motion.reset_drive_system();
  
-  motion.start_turn(90, 360, 0, 3600);
-  while (!motion.turn_finished())
-  {
-    encoders.update();
-    motion.update();
-    sensors.update();
-    motors.update(motion.velocity(), motion.omega());
+  // motion.start_turn(90, 360, 0, 3600);
+  // while (!motion.turn_finished())
+  // {
+  //   encoders.update();
+  //   motion.update();
+  //   sensors.update();
+  //   motors.update(motion.velocity(), motion.omega());
 
-    reporter.send();
-  }
-  motors.stop();
+  //   reporter.send();
+  // }
+  // motors.stop();
 
 }

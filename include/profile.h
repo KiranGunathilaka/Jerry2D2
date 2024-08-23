@@ -68,13 +68,6 @@ public:
         m_state = PS_ACCELERATING;
     }
 
-    // Start a profile and wait for it to finish. This is a blocking call.
-    void move(float distance, float top_speed, float final_speed, float acceleration)
-    {
-        start(distance, top_speed, final_speed, acceleration);
-        wait_until_finished();
-    }
-
 
     void stop()
     {

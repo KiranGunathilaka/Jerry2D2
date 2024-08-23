@@ -142,7 +142,9 @@ struct TurnParameters {
   int trigger;       //         - front sensor value at start of turn
 };
 
-#define TARGET1 Location(7,7)
-#define TARGET2 Location(8,7)
-#define TARGET3 Location(7,8)
-#define TARGET4 Location(8,8)
+#define TARGET Location(7,7)
+#define MAZE_WIDTH 16
+#define MAZE_HEIGHT 16
+#define MAZE_CELL_COUNT (MAZE_WIDTH * MAZE_HEIGHT)
+#define MAX_COST (MAZE_CELL_COUNT - 1)
+

@@ -76,10 +76,7 @@ public:
     return forward.is_finished();
   }
 
-  void move(float distance, float top_speed, float final_speed, float acceleration)
-  {
-    forward.move(distance, top_speed, final_speed, acceleration);
-  }
+
 
   void start_turn(float distance, float top_speed, float final_speed, float acceleration)
   {
@@ -91,10 +88,6 @@ public:
     return rotation.is_finished();
   }
 
-  void turn(float distance, float top_speed, float final_speed, float acceleration)
-  {
-    rotation.move(distance, top_speed, final_speed, acceleration);
-  }
 
   void update()
   {
@@ -112,27 +105,19 @@ public:
     forward.adjust_position(delta);
   }
 
-  //***************************************************************************//
-
-  void turn(float angle, float omega, float alpha)
-  {
-    // get ready to turn
-    rotation.reset();
-    rotation.move(angle, omega, 0, alpha);
-  }
 
 
   //****************************************************************************//
-  void stop_at(float position)
-  {
-    float remaining = position - forward.position();
-    forward.move(remaining, forward.speed(), 0, forward.acceleration());
-  }
+  // void stop_at(float position)
+  // {
+  //   float remaining = position - forward.position();
+  //   forward.move(remaining, forward.speed(), 0, forward.acceleration());
+  // }
 
-  void stop_after(float distance)
-  {
-    forward.move(distance, forward.speed(), 0, forward.acceleration());
-  }
+  // void stop_after(float distance)
+  // {
+  //   forward.move(distance, forward.speed(), 0, forward.acceleration());
+  // }
 
   void wait_until_position(float position)
   {
