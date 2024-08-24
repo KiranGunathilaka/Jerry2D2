@@ -78,7 +78,7 @@ public:
         delay(30);
         tofCenter.setAddress(TOF_CENTER_ADD);
 
-        //changing address of 3rd tof
+        // changing address of 3rd tof
         digitalWrite(ToF_XSHUT_Left, HIGH);
         delay(30);
         tofLeft.init(true);
@@ -105,16 +105,17 @@ public:
 
     float get_steering_feedback()
     {
-        return steering_adjustment;
+        return m_steering_adjustment;
     };
 
     float get_cross_track_error()
     {
-        return cross_track_error;
+        return m_cross_track_error;
     };
 
-    int get_angle_adjustment(int turned){
-        return heading_north - getMagReadings() -turned;
+    int get_angle_adjustment(int turned)
+    {
+        return heading_north - getMagReadings() - turned;
     }
 
     void update()
@@ -138,6 +139,25 @@ public:
         leftWallExist = left_tof < LEFT_DISTANCE_THRESHOLD;
         frontWallExist = center_tof < FRONT_THRESHOLD;
 
+        int error = 0;
+        int right_error = SIDE_DISTANCE - right_tof;
+        int left_error = SIDE_DISTANCE - left_tof;
+        {
+            if (sensors.leftWallExist && sensors.rightWallExist)
+            {
+                error = left_error - right_error;
+            }
+            else if (sensors.right_tof)
+            {
+                error = 2 * left_error;
+            }
+            else if (sensors.left_tof)
+            {
+                error = -2 * right_error;
+            }
+        }
+        calculate_steering_adjustment();
+
         // magnetometer update
         if (magDetect)
         {
@@ -152,6 +172,18 @@ public:
         {
             direction += 360;
         }
+    }
+
+    float calculate_steering_adjustment()
+    {
+        // always calculate the adjustment for testing. It may not get used.
+        float pTerm = STEERING_KP * m_cross_track_error;
+        float dTerm = STEERING_KD * (m_cross_track_error - last_steering_error);
+        float adjustment = (pTerm + dTerm) * encoders.loopTime_s();
+        adjustment = constrain(adjustment, -STEERING_ADJUST_LIMIT, STEERING_ADJUST_LIMIT);
+        last_steering_error = m_cross_track_error;
+        m_steering_adjustment = adjustment;
+        return adjustment;
     }
 
     // getting LSM6DS3 readings
@@ -211,8 +243,8 @@ public:
 private:
     // variables for steering
     float last_steering_error = 0;
-    volatile float cross_track_error;
-    volatile float steering_adjustment;
+    volatile float m_cross_track_error;
+    volatile float m_steering_adjustment;
     volatile float frontSum;
     volatile float frontDiff;
 
