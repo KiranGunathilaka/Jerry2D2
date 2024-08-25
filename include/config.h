@@ -50,7 +50,7 @@ const float centerOffsetY = -2.08;
 
 const float RIGHT_DISTANCE_THRESHOLD = 95.0; //in mm
 const float LEFT_DISTANCE_THRESHOLD = 95.0; //in mm
-const float FRONT_THRESHOLD = 110.0; //in mm
+const float FRONT_THRESHOLD = 100.0; //in mm
 const float SIDE_DISTANCE = 55.0;
 
 const float STEERING_KP = 0.1;
@@ -120,12 +120,13 @@ uint8_t broadcastAddress[] = { 0xEC, 0xDA, 0x3B, 0x51, 0xA5, 0x84 }; // RECEIVER
 const int FULL_CELL = 180; //in mm
 const int HALF_CELL = 90;
 const int INITIAL_OFFSET_FROM_CENTER = 0;
-const int STOP_DISTANCE = 120; // sum of the distance readings when mouse positioned centered in a cell before a front wall
+const int STOP_DISTANCE = 60; // sum of the distance readings when mouse positioned centered in a cell before a front wall
+const int FORWARD_STOP_POSITION_FROM_WALL = 45;
 
 const int OMEGA_SPIN_TURN = 360;
 const int ALPHA_SPIN_TURN = 3600;
 
-const int SEARCH_SPEED= 180;
+const int SEARCH_SPEED= 250;
 const int SEARCH_ACCELERATION = 1000;
 
 const int EXTRA_WALL_ADJUST = 12; //wall thickness
@@ -146,10 +147,10 @@ const int BACK_WALL_TO_CENTER = 0; //distance that need to be travelled to go to
 // #define MAZE_CELL_COUNT (MAZE_WIDTH * MAZE_HEIGHT)
 // #define MAX_COST (MAZE_CELL_COUNT - 1)
 
-#define TARGET1 Location(2,3)
-#define TARGET2 Location(2,3)
-#define TARGET3 Location(2,3)
-#define TARGET4 Location(2,3)
+#define TARGET1 Location(1,4)
+#define TARGET2 Location(1,4)
+#define TARGET3 Location(1,4)
+#define TARGET4 Location(1,4)
 #define MAZE_WIDTH 5
 #define MAZE_HEIGHT 6
 #define MAZE_CELL_COUNT (MAZE_WIDTH * MAZE_HEIGHT)
