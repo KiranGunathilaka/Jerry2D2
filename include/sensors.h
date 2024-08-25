@@ -12,10 +12,16 @@ class Sensors;
 
 extern Sensors sensors;
 
+enum
+{
+    STEER_NORMAL,
+    STEERING_OFF,
+};
+
 class Sensors
 {
 public:
-    // remove after adjusting
+    uint8_t g_steering_mode = STEER_NORMAL;
 
     volatile bool frontWallExist;
     volatile bool leftWallExist;
@@ -96,7 +102,7 @@ public:
         tofRight.setMeasurementTimingBudget(20000);
 
         // Magnetometer initialization
-        magDetect = mag.begin();
+        // magDetect = mag.begin();
 
         // sensors.update();
         // heading_north = getMagReadings();
@@ -113,10 +119,10 @@ public:
         return m_cross_track_error;
     };
 
-    int get_angle_adjustment(int turned)
-    {
-        return heading_north - getMagReadings() - turned;
-    }
+    // int get_angle_adjustment(int turned)
+    // {
+    //     return heading_north - getMagReadings() - turned;
+    // }
 
     void update()
     {
@@ -142,36 +148,38 @@ public:
         int error = 0;
         int right_error = SIDE_DISTANCE - right_tof;
         int left_error = SIDE_DISTANCE - left_tof;
+        if (g_steering_mode == STEER_NORMAL)
         {
             if (sensors.leftWallExist && sensors.rightWallExist)
             {
                 error = left_error - right_error;
             }
-            else if (sensors.right_tof)
+            else if (sensors.leftWallExist)
             {
                 error = 2 * left_error;
             }
-            else if (sensors.left_tof)
+            else if (sensors.rightWallExist)
             {
                 error = -2 * right_error;
             }
         }
+        m_cross_track_error = error;
         calculate_steering_adjustment();
 
         // magnetometer update
-        if (magDetect)
-        {
-            sensors_event_t event;
-            mag.getEvent(&event);
+        // if (magDetect)
+        // {
+        //     sensors_event_t event;
+        //     mag.getEvent(&event);
 
-            magArr[0] = event.magnetic.x - centerOffsetX;
-            magArr[1] = event.magnetic.y - centerOffsetY;
-        }
-        direction = atan2(magArr[1] * scaleY, magArr[0] * scaleX) * radToDeg;
-        if (direction < 0)
-        {
-            direction += 360;
-        }
+        //     magArr[0] = event.magnetic.x - centerOffsetX;
+        //     magArr[1] = event.magnetic.y - centerOffsetY;
+        // }
+        // direction = atan2(magArr[1] * scaleY, magArr[0] * scaleX) * radToDeg;
+        // if (direction < 0)
+        // {
+        //     direction += 360;
+        // }
     }
 
     float calculate_steering_adjustment()
@@ -184,6 +192,13 @@ public:
         last_steering_error = m_cross_track_error;
         m_steering_adjustment = adjustment;
         return adjustment;
+    }
+
+    void set_steering_mode(uint8_t mode)
+    {
+        last_steering_error = m_cross_track_error;
+        m_steering_adjustment = 0;
+        g_steering_mode = mode;
     }
 
     // getting LSM6DS3 readings
@@ -207,10 +222,10 @@ public:
     }
 
     // GY-271 readings
-    int getMagReadings()
-    {
-        return (int)direction;
-    }
+    // int getMagReadings()
+    // {
+    //     return (int)direction;
+    // }
 
     void writeByteGyro(uint8_t reg, uint8_t value)
     {

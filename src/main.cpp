@@ -35,21 +35,25 @@ void setup()
   reporter.begin();
   maze.initialise();
   mouse.init();
-  //maze.set_goal(TARGET);
 
   // Set up a timer to call reporter.send() every 500ms (or any other interval)
-  //sendTicker.attach(0.015, []()  { reporter.send(); });
-  delay(4000);
- 
+  sendTicker.attach(0.0185, []()
+                    { 
+                      encoders.update();
+                      sensors.update();
+                      motion.update();
+                      motors.update(motion.velocity(), motion.omega(), sensors.get_steering_feedback());
+                      reporter.sendWalls(); });
+
+  delay(2000);
 }
 
 void loop()
 {
   mouse.search();
 
-  while(true){
+  while (true)
+  {
     motors.stop();
   }
-
-
 }

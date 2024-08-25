@@ -6,6 +6,8 @@
 #include "esp_system.h"
 
 
+const int loopTime = 18500; //in micro seconds
+
 //**************************************************ENCODER CONFIG**************************************************************************
 const int LeftEncoderPin1 = 33;
 const int LeftEncoderPin2 = 32;
@@ -48,11 +50,11 @@ const float centerOffsetY = -2.08;
 
 const float RIGHT_DISTANCE_THRESHOLD = 95.0; //in mm
 const float LEFT_DISTANCE_THRESHOLD = 95.0; //in mm
-const float FRONT_THRESHOLD = 130.0; //in mm
+const float FRONT_THRESHOLD = 110.0; //in mm
 const float SIDE_DISTANCE = 55.0;
 
-const float STEERING_KP = 12.8;
-const float STEERING_KD = 1;
+const float STEERING_KP = 0.1;
+const float STEERING_KD = 1.5;
 const float STEERING_ADJUST_LIMIT = 10.0;
 
 const float rightFrontSideAngle = 38.6;
@@ -115,7 +117,7 @@ uint8_t broadcastAddress[] = { 0xEC, 0xDA, 0x3B, 0x51, 0xA5, 0x84 }; // RECEIVER
 
 //**************************************************MOUSE CONFIG****************************************************************************
 
-const int FULL_CELL = 192; //in mm
+const int FULL_CELL = 180; //in mm
 const int HALF_CELL = 90;
 const int INITIAL_OFFSET_FROM_CENTER = 0;
 const int STOP_DISTANCE = 120; // sum of the distance readings when mouse positioned centered in a cell before a front wall
@@ -135,12 +137,20 @@ const int BACK_WALL_TO_CENTER = 0; //distance that need to be travelled to go to
 
 
 
-#define TARGET1 Location(7,8)
-#define TARGET2 Location(7,9)
-#define TARGET3 Location(8,8)
-#define TARGET4 Location(8,9)
-#define MAZE_WIDTH 16
-#define MAZE_HEIGHT 17
+// #define TARGET1 Location(7,8)
+// #define TARGET2 Location(7,9)
+// #define TARGET3 Location(8,8)
+// #define TARGET4 Location(8,9)
+// #define MAZE_WIDTH 16
+// #define MAZE_HEIGHT 17
+// #define MAZE_CELL_COUNT (MAZE_WIDTH * MAZE_HEIGHT)
+// #define MAX_COST (MAZE_CELL_COUNT - 1)
+
+#define TARGET1 Location(2,3)
+#define TARGET2 Location(2,3)
+#define TARGET3 Location(2,3)
+#define TARGET4 Location(2,3)
+#define MAZE_WIDTH 5
+#define MAZE_HEIGHT 6
 #define MAZE_CELL_COUNT (MAZE_WIDTH * MAZE_HEIGHT)
 #define MAX_COST (MAZE_CELL_COUNT - 1)
-
