@@ -1,12 +1,16 @@
-#pragma once
+#ifndef REPORTING_H
+#define REPORTING_H
+
 #include <esp_now.h>
 #include <WiFi.h>
 #include <config.h>
 #include "mouse.h"
+#include "maze.h"
 
 class Reporting;
-
 extern Reporting reporter;
+
+class Mouse;
 
 class Reporting
 {
@@ -39,6 +43,18 @@ public:
         int speed;
         int omega;
     } receiveData;
+
+    typedef struct wallSend
+    {
+        int x;
+        int y;
+        int north;
+        int east;
+        int south;
+        int west;
+    } wallSend;
+
+    wallSend myData;
 
     receiveData command;
     esp_now_peer_info_t peerInfo;
@@ -127,7 +143,22 @@ public:
         transmitData.currentCellX = (int)mouse.getNowLocation().y;
         transmitData.nextCellX = (int)mouse.getNextLocation().x;
         transmitData.nextCellX = (int)mouse.getNextLocation().y;
+
         // Send message via ESP-NOW
         esp_now_send(broadcastAddress, (uint8_t *)&transmitData, sizeof(transmitData));
     }
+
+    void sendWalls()
+    {
+        myData.x = mouse.getNowLocation().x;
+        myData.y = mouse.getNowLocation().y;
+        myData.north = maze.walls(mouse.getNowLocation()).north;
+        myData.east = maze.walls(mouse.getNowLocation()).east;
+        myData.south = maze.walls(mouse.getNowLocation()).south;
+        myData.west = maze.walls(mouse.getNowLocation()).west;
+
+        esp_now_send(broadcastAddress, (uint8_t *)&myData, sizeof(myData));
+    }
 };
+
+#endif

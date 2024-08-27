@@ -12,10 +12,16 @@ class Sensors;
 
 extern Sensors sensors;
 
+enum
+{
+    STEER_NORMAL,
+    STEERING_OFF,
+};
+
 class Sensors
 {
 public:
-    // remove after adjusting
+    uint8_t g_steering_mode = STEER_NORMAL;
 
     volatile bool frontWallExist;
     volatile bool leftWallExist;
@@ -78,7 +84,7 @@ public:
         delay(30);
         tofCenter.setAddress(TOF_CENTER_ADD);
 
-        //changing address of 3rd tof
+        // changing address of 3rd tof
         digitalWrite(ToF_XSHUT_Left, HIGH);
         delay(30);
         tofLeft.init(true);
@@ -96,7 +102,7 @@ public:
         tofRight.setMeasurementTimingBudget(20000);
 
         // Magnetometer initialization
-        magDetect = mag.begin();
+        // magDetect = mag.begin();
 
         // sensors.update();
         // heading_north = getMagReadings();
@@ -105,17 +111,18 @@ public:
 
     float get_steering_feedback()
     {
-        return steering_adjustment;
+        return m_steering_adjustment;
     };
 
     float get_cross_track_error()
     {
-        return cross_track_error;
+        return m_cross_track_error;
     };
 
-    int get_angle_adjustment(int turned){
-        return heading_north - getMagReadings() -turned;
-    }
+    // int get_angle_adjustment(int turned)
+    // {
+    //     return heading_north - getMagReadings() - turned;
+    // }
 
     void update()
     {
@@ -138,20 +145,60 @@ public:
         leftWallExist = left_tof < LEFT_DISTANCE_THRESHOLD;
         frontWallExist = center_tof < FRONT_THRESHOLD;
 
-        // magnetometer update
-        if (magDetect)
+        int error = 0;
+        int right_error = SIDE_DISTANCE - right_tof;
+        int left_error = SIDE_DISTANCE - left_tof;
+        if (g_steering_mode == STEER_NORMAL)
         {
-            sensors_event_t event;
-            mag.getEvent(&event);
+            if (sensors.leftWallExist && sensors.rightWallExist)
+            {
+                error = left_error - right_error;
+            }
+            else if (sensors.leftWallExist)
+            {
+                error = 2 * left_error;
+            }
+            else if (sensors.rightWallExist)
+            {
+                error = -2 * right_error;
+            }
+        }
+        m_cross_track_error = error;
+        calculate_steering_adjustment();
 
-            magArr[0] = event.magnetic.x - centerOffsetX;
-            magArr[1] = event.magnetic.y - centerOffsetY;
-        }
-        direction = atan2(magArr[1] * scaleY, magArr[0] * scaleX) * radToDeg;
-        if (direction < 0)
-        {
-            direction += 360;
-        }
+        // magnetometer update
+        // if (magDetect)
+        // {
+        //     sensors_event_t event;
+        //     mag.getEvent(&event);
+
+        //     magArr[0] = event.magnetic.x - centerOffsetX;
+        //     magArr[1] = event.magnetic.y - centerOffsetY;
+        // }
+        // direction = atan2(magArr[1] * scaleY, magArr[0] * scaleX) * radToDeg;
+        // if (direction < 0)
+        // {
+        //     direction += 360;
+        // }
+    }
+
+    float calculate_steering_adjustment()
+    {
+        // always calculate the adjustment for testing. It may not get used.
+        float pTerm = STEERING_KP * m_cross_track_error;
+        float dTerm = STEERING_KD * (m_cross_track_error - last_steering_error);
+        float adjustment = (pTerm + dTerm) * encoders.loopTime_s();
+        adjustment = constrain(adjustment, -STEERING_ADJUST_LIMIT, STEERING_ADJUST_LIMIT);
+        last_steering_error = m_cross_track_error;
+        m_steering_adjustment = adjustment;
+        return adjustment;
+    }
+
+    void set_steering_mode(uint8_t mode)
+    {
+        last_steering_error = m_cross_track_error;
+        m_steering_adjustment = 0;
+        g_steering_mode = mode;
     }
 
     // getting LSM6DS3 readings
@@ -175,10 +222,10 @@ public:
     }
 
     // GY-271 readings
-    int getMagReadings()
-    {
-        return (int)direction;
-    }
+    // int getMagReadings()
+    // {
+    //     return (int)direction;
+    // }
 
     void writeByteGyro(uint8_t reg, uint8_t value)
     {
@@ -211,8 +258,8 @@ public:
 private:
     // variables for steering
     float last_steering_error = 0;
-    volatile float cross_track_error;
-    volatile float steering_adjustment;
+    volatile float m_cross_track_error;
+    volatile float m_steering_adjustment;
     volatile float frontSum;
     volatile float frontDiff;
 
