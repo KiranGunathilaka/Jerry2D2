@@ -137,16 +137,6 @@ const int ERROR_CORRECTION_ALPHA = 1000;
 const int BACK_WALL_TO_CENTER = 0; //distance that need to be travelled to go to the center when robot is against the backwall
 
 
-
-// #define TARGET1 Location(7,8)
-// #define TARGET2 Location(7,9)
-// #define TARGET3 Location(8,8)
-// #define TARGET4 Location(8,9)
-// #define MAZE_WIDTH 16
-// #define MAZE_HEIGHT 17
-// #define MAZE_CELL_COUNT (MAZE_WIDTH * MAZE_HEIGHT)
-// #define MAX_COST (MAZE_CELL_COUNT - 1)
-
 #define TARGET1 Location(7,7)
 #define TARGET2 Location(7,8)
 #define TARGET3 Location(8,7)
