@@ -8,6 +8,7 @@
 #include "motion.h"
 #include "profile.h"
 #include "mouse.h"
+#include "analog.h"
 
 Encoders encoders;
 Motors motors;
@@ -18,26 +19,22 @@ Profile rotation;
 Motion motion;
 Mouse mouse;
 Maze maze;
+Analog analog;
 
 Reporting *Reporting::instance = nullptr; // Initialize the static member
 
 Ticker sendTicker;
 
-const int SEARCH_SELECT_PIN = 2;
-const int RUN_SELECT_PIN = 15;
 
 void setup()
 {
   Serial.begin(115200);
 
-  // pinMode(SEARCH_SELECT_PIN, INPUT_PULLUP);
-  // pinMode(RUN_SELECT_PIN, INPUT_PULLUP);
-
   encoders.begin();
   encoders.reset();
   motors.begin();
   sensors.begin();
-  reporter.begin();
+  //reporter.begin();
   maze.initialise();
   mouse.init();
 
@@ -48,50 +45,31 @@ void setup()
                       sensors.update();
                       motion.update();
                       motors.update(motion.velocity(), motion.omega(), sensors.get_steering_feedback());
-                      reporter.sendWalls(); });
+                      //reporter.sendWalls(); 
+                      });
 
   delay(4000);
 }
 
 void loop()
 {
-  // int switchStateSearch = digitalRead(SEARCH_SELECT_PIN);
-  // int switchStateRun = digitalRead(RUN_SELECT_PIN);
-
-  // Check if the search switch is ON (LOW)
-  // if (switchStateSearch == LOW) {
-  //   Serial.println("Searching");
-  //   delay(5000);
+  // if (analog.switchRead() == 1)
+  // {
+  //   Serial.println("1");
   //   mouse.search();
-
-  //   // Wait until the switch is turned off
-  //   while (digitalRead(SEARCH_SELECT_PIN) == LOW) {
-  //     Serial.print("Search done");
-  //     motors.stop();
-  //     delay(100);
-  //   }
+  // }else if (analog.switchRead() ==2){
+  //   //Serial.println("2");
+  // }else if (analog.switchRead() ==3){
+  //   //Serial.println("3");
+  // }else if (analog.switchRead() ==4){
+  //   //Serial.println("4");
+  // }else{
+  //   //Serial.println("None");
   // }
-
-  // // Check if the run switch is ON (LOW)
-  // if (switchStateRun == LOW) {
-  //   Serial.println("Running");
-  //   delay(5000);
-  //   mouse.run();
-
-  //   // Wait until the switch is turned off
-  //   while (digitalRead(RUN_SELECT_PIN) == LOW) {
-  //     Serial.println("Run done");
-  //     motors.stop();
-  //     delay(100);
-  //   }
-  // }
-
   mouse.search();
-
-  while (true)
-  {
-    motors.stop();
-    delay(100);
+  motors.stop();
+  //analog.batteryRead();
+  while(true){
+      delay(200);
   }
-
 }
