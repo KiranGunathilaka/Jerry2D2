@@ -66,7 +66,7 @@ void loop()
   // }else{
   //   //Serial.println("None");
   // }
-  mouse.search();
+  mouse.search_maze();
   motors.stop();
   //analog.batteryRead();
   while(true){

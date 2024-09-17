@@ -143,13 +143,11 @@ const int BATTERY_PIN = 4;
 //***************************************************Maze*******************************************************************************
 
 
-#define TARGET1 Location(3,4)
-#define TARGET2 Location(3,4)
-#define TARGET3 Location(3,4)
-#define TARGET4 Location(3,4)
-#define MAZE_WIDTH 8
+#define TARGET Location(3,4)
+#define MAZE_WIDTH 7
 #define MAZE_HEIGHT 8
 #define MAZE_CELL_COUNT (MAZE_WIDTH * MAZE_HEIGHT)
 #define MAX_COST (MAZE_CELL_COUNT - 1)
 
 #define STACK_SIZE 256
+#define QUEUE_SIZE 256
