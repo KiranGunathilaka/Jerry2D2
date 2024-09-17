@@ -136,9 +136,13 @@ const int ERROR_CORRECTION_ALPHA = 1000;
 
 const int BACK_WALL_TO_CENTER = 0; //distance that need to be travelled to go to the center when robot is against the backwall
 
-//***************************************************Switches******************************************************************************
+//***************************************************Switches/Battery/Indicators******************************************************************************
 const int SWITCH_PIN = 15;
 const int BATTERY_PIN = 4;
+
+const float NOMINAL_BATTERY_V = 7.4;
+
+const float INDICATOR_PIN = 2;
 
 //***************************************************Maze*******************************************************************************
 

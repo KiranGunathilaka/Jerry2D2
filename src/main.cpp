@@ -44,11 +44,17 @@ void setup()
                       encoders.update();
                       sensors.update();
                       motion.update();
+                      analog.batteryRead();
                       motors.update(motion.velocity(), motion.omega(), sensors.get_steering_feedback());
                       //reporter.sendWalls(); 
                       });
-
-  delay(4000);
+  pinMode(INDICATOR_PIN, OUTPUT);
+  for(int i=0 ;i<4 ;i++){
+      digitalWrite(INDICATOR_PIN, HIGH);
+      delay(500);
+      digitalWrite(INDICATOR_PIN, LOW);
+      delay(500);
+  }
 }
 
 void loop()
