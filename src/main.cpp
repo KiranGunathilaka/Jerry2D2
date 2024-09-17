@@ -73,6 +73,10 @@ void loop()
   //   //Serial.println("None");
   // }
   mouse.search_maze();
+
+  maze.set_mask(MASK_CLOSED);
+  mouse.run_to(TARGET);
+
   motors.stop();
   //analog.batteryRead();
   while(true){
