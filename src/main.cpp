@@ -9,6 +9,7 @@
 #include "profile.h"
 #include "mouse.h"
 #include "analog.h"
+#include "nvs.h"
 
 Encoders encoders;
 Motors motors;
@@ -20,6 +21,7 @@ Motion motion;
 Mouse mouse;
 Maze maze;
 Analog analog;
+NVS nvs;
 
 Reporting *Reporting::instance = nullptr; // Initialize the static member
 
@@ -59,24 +61,22 @@ void setup()
 
 void loop()
 {
-  // if (analog.switchRead() == 1)
-  // {
-  //   Serial.println("1");
-  //   mouse.search();
-  // }else if (analog.switchRead() ==2){
-  //   //Serial.println("2");
-  // }else if (analog.switchRead() ==3){
-  //   //Serial.println("3");
-  // }else if (analog.switchRead() ==4){
-  //   //Serial.println("4");
-  // }else{
-  //   //Serial.println("None");
-  // }
-  mouse.search_maze();
+  if (analog.switchRead() == 1)
+  {
+    mouse.search_maze();
+    nvs.saveArrays();
 
-  delay(5000);
+  }else if (analog.switchRead() ==2){
+    nvs.loadArrays();
+    mouse.run_to(TARGET);
+  }else if (analog.switchRead() ==3){
+    //Serial.println("3");
+  }else if (analog.switchRead() ==4){
+    //Serial.println("4");
+  }else{
+    //Serial.println("None");
+  }
 
-  mouse.run_to(TARGET);
 
   motors.stop();
   //analog.batteryRead();
