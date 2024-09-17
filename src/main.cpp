@@ -81,16 +81,12 @@ void loop()
   }
 
 
-  //motors.stop();
-  // while (true){
-  //   digitalWrite(INDICATOR_PIN, HIGH);
-  //   delay(100);
-  //   digitalWrite(INDICATOR_PIN, LOW);
-  //   delay(100);
-  // }
-  digitalWrite(INDICATOR_PIN, HIGH);
-  delay(100);
-  digitalWrite(INDICATOR_PIN, LOW);
-  delay(100);
+  motors.stop();
+  while (true){
+    digitalWrite(INDICATOR_PIN, HIGH);
+    delay(100);
+    digitalWrite(INDICATOR_PIN, LOW);
+    delay(100);
+  }
 
 }
