@@ -69,6 +69,7 @@ void loop()
   }else if (analog.switchRead() ==2){
     nvs.loadArrays();
     mouse.run_to(TARGET);
+    
   }else if (analog.switchRead() ==3){
     //Serial.println("3");
   }else if (analog.switchRead() ==4){
