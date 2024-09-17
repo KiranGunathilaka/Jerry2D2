@@ -91,7 +91,7 @@ void loop()
   
   mouse.search_maze();
 
-  maze.set_mask(MASK_CLOSED);
+  delay(5000);
   mouse.run_to(TARGET);
 
   motors.stop();
