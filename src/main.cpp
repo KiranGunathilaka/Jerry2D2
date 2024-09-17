@@ -57,10 +57,12 @@ void setup()
       digitalWrite(INDICATOR_PIN, LOW);
       delay(500);
   }
+  motion.reset_drive_system();
 }
 
 void loop()
 {
+
   if (analog.switchRead() == 1)
   {
     mouse.search_maze();
@@ -79,13 +81,16 @@ void loop()
   }
 
 
-  motors.stop();
-  //analog.batteryRead();
-  while (true){
-    digitalWrite(INDICATOR_PIN, HIGH);
-    delay(100);
-    digitalWrite(INDICATOR_PIN, LOW);
-    delay(100);
-  }
+  //motors.stop();
+  // while (true){
+  //   digitalWrite(INDICATOR_PIN, HIGH);
+  //   delay(100);
+  //   digitalWrite(INDICATOR_PIN, LOW);
+  //   delay(100);
+  // }
+  digitalWrite(INDICATOR_PIN, HIGH);
+  delay(100);
+  digitalWrite(INDICATOR_PIN, LOW);
+  delay(100);
 
 }
