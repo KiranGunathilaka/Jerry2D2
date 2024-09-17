@@ -11,7 +11,6 @@ class Analog
 {
 
 public:
-    int analogValue;
 
     int switchRead()
     {
@@ -29,12 +28,15 @@ public:
         return 0;
     }
 
-    float batteryRead(){
+    void batteryRead(){
         int analogValue = analogRead(BATTERY_PIN);
-        float voltage = analogValue * (3.3/4095) * 3 + 0.26;
+        battery_voltage = analogValue * (3.3/4095) * 3 + 0.26;
 
-        Serial.println(voltage);
-
-        return voltage;
     }
+    inline float batteryVoltage(){
+        return battery_voltage;
+    }
+    
+private:
+    float battery_voltage;
 };
