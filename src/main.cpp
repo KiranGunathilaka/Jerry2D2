@@ -72,26 +72,10 @@ void loop()
   // }else{
   //   //Serial.println("None");
   // }
-
-
-  // sensors.set_steering_mode(STEER_NORMAL);
-  // motion.start_move(FULL_CELL*8,SEARCH_SPEED, SEARCH_EXIT_SPEED, SEARCH_ACCELERATION);
-  // while (!motion.move_finished())
-  // {
-  //     delayMicroseconds(loopTime);
-
-  //     // if they detect a front wall, decelerate only to cover the remaining position
-  //     if (sensors.frontWallExist)
-  //     {
-  //         mouse.stopAndAdjust();
-  //         break;
-  //     }
-  // }
-
-  
   mouse.search_maze();
 
   delay(5000);
+
   mouse.run_to(TARGET);
 
   motors.stop();
@@ -102,7 +86,5 @@ void loop()
     digitalWrite(INDICATOR_PIN, LOW);
     delay(100);
   }
-
-  mouse.turn_180();
 
 }
