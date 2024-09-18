@@ -111,8 +111,8 @@ const float ROT_KD_90 = 0.5;
 const float STEERING_KP = 0.3;//0.1;
 const float STEERING_KD = 8;//1.5;
 
-const float STEERING_KP_FINAL = 1.0;
-const float STEERING_KD_FINAL = 19;
+const float STEERING_KP_FINAL = 0.9;
+const float STEERING_KD_FINAL = 15;
 
 const float STEERING_ADJUST_LIMIT = 10.0;
 
@@ -129,7 +129,7 @@ const int FORWARD_STOP_POSITION_FROM_WALL = 45;
 
 const int OMEGA_SPIN_TURN = 360;
 const int ALPHA_SPIN_TURN = 3600;
-const int SPIN_OFFSET = -15;   //degrees that should be added to 180 to get a 180 turn (without this robot turns about 200 degrees)
+const int SPIN_OFFSET = -5;   //degrees that should be added to 180 to get a 180 turn (without this robot turns about 200 degrees)
 
 const int SEARCH_SPEED= 500;//320;
 const int FINAL_SPEED = 460;
