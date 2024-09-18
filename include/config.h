@@ -149,7 +149,7 @@ const int BATTERY_PIN = 4;
 
 const float NOMINAL_BATTERY_V = 7.4;
 
-const float INDICATOR_PIN = 2;
+const int INDICATOR_PIN = 2;
 
 const int STARTING = 0;
 const int TARGET_REACHED = 1;

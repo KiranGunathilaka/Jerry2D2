@@ -33,9 +33,6 @@ void setup()
 {
   Serial.begin(115200);
 
-  indicators.begin();
-  indicators.backToBack();
-
   encoders.begin();
   encoders.reset();
   motors.begin();
@@ -43,6 +40,7 @@ void setup()
   indicators.begin();
   maze.initialise();
   mouse.init();
+  indicators.begin();
   // reporter.begin();
 
   // Set up a timer to call reporter.send() every 500ms (or any other interval)
@@ -58,6 +56,7 @@ void setup()
 
   indicators.customBlink_iter(400, 400, 5);
   indicators.batteryLowIndicator();
+
   motion.reset_drive_system();
 }
 
