@@ -156,7 +156,7 @@ const int TARGET_REACHED = 1;
 const int LOW_BATTERY = 10;
 
 const int BUZZER_PIN = 17;
-const int USELESS_PIN = 16;
+const int BACKLIT_LED_PIN = 16;
 
 //***************************************************Maze*******************************************************************************
 

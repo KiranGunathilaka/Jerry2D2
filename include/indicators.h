@@ -5,12 +5,19 @@
 #include <stdint.h>
 #include "config.h"
 #include "Buzzer.h"
+#include "analog.h"
 
-Buzzer buzzer(BUZZER_PIN, USELESS_PIN);
+Buzzer buzzer(BUZZER_PIN, BACKLIT_LED_PIN);
 
 class Indicators
 {
 public:
+    void begin()
+    {
+        pinMode(INDICATOR_PIN, OUTPUT);
+        buzzer.begin(10);
+    }
+
     void customBlink_iter(int ontime, int offtime, int iterations)
     {
         for (int i; i < iterations; i++)
@@ -53,9 +60,19 @@ public:
         }
     }
 
+    void batteryLowIndicator(){
+        if (analog.batteryRead() < 7.3){
+            buzzer.sound(NOTE_D4, 400);
+            buzzer.sound(0, 300);
+            buzzer.sound(NOTE_CS4, 400);
+            buzzer.sound(0, 300);
+            buzzer.sound(NOTE_B3, 400);
+            buzzer.sound(0, 300);
+        }
+    }
+
     void backToBack()
     {
-        buzzer.begin(10);
 
         buzzer.sound(NOTE_E4, 350);
         buzzer.sound(0, 350);

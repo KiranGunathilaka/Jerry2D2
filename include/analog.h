@@ -28,10 +28,11 @@ public:
         return 0;
     }
 
-    void batteryRead(){
+    float batteryRead(){
         int analogValue = analogRead(BATTERY_PIN);
         battery_voltage = analogValue * (3.3/4095) * 3 + 0.26;
-
+        
+        return battery_voltage;
     }
     inline float batteryVoltage(){
         return battery_voltage;
