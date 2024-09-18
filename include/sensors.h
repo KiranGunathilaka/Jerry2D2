@@ -23,6 +23,9 @@ class Sensors
 public:
     uint8_t g_steering_mode = STEER_NORMAL;
 
+    float steering_kp = STEERING_KP;
+    float steering_kd = STEERING_KD;
+
     volatile bool frontWallExist;
     volatile bool leftWallExist;
     volatile bool rightWallExist;
@@ -185,8 +188,8 @@ public:
     float calculate_steering_adjustment()
     {
         // always calculate the adjustment for testing. It may not get used.
-        float pTerm = STEERING_KP * m_cross_track_error;
-        float dTerm = STEERING_KD * (m_cross_track_error - last_steering_error);
+        float pTerm = steering_kp * m_cross_track_error;
+        float dTerm = steering_kd * (m_cross_track_error - last_steering_error);
         float adjustment = (pTerm + dTerm) * encoders.loopTime_s();
         adjustment = constrain(adjustment, -STEERING_ADJUST_LIMIT, STEERING_ADJUST_LIMIT);
         last_steering_error = m_cross_track_error;
