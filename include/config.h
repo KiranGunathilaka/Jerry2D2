@@ -151,6 +151,13 @@ const float NOMINAL_BATTERY_V = 7.4;
 
 const float INDICATOR_PIN = 2;
 
+const int STARTING = 0;
+const int TARGET_REACHED = 1;
+const int LOW_BATTERY = 10;
+
+const int BUZZER_PIN = 17;
+const int USELESS_PIN = 16;
+
 //***************************************************Maze*******************************************************************************
 
 

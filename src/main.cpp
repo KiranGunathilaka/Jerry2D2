@@ -10,6 +10,7 @@
 #include "mouse.h"
 #include "analog.h"
 #include "nvs.h"
+#include "indicators.h"
 
 Encoders encoders;
 Motors motors;
@@ -22,6 +23,7 @@ Mouse mouse;
 Maze maze;
 Analog analog;
 NVS nvs;
+Indicators indicators;
 
 Reporting *Reporting::instance = nullptr; // Initialize the static member
 
@@ -65,12 +67,12 @@ void loop()
 
   if (analog.switchRead() == 1)
   {
+    indicators.backToBack();
     mouse.search_maze();
     nvs.saveArrays();
 
   }else if (analog.switchRead() ==2){
     nvs.loadArrays();
-    mouse.run_to(TARGET);
     
   }else if (analog.switchRead() ==3){
     //Serial.println("3");
