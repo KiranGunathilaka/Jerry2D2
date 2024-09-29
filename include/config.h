@@ -112,8 +112,8 @@ const float ROT_KD_90 = 0.5;
 const float STEERING_KP = 0.6;//0.3;
 const float STEERING_KD = 11;//8;
 
-const float STEERING_KP_FINAL = 1.3;
-const float STEERING_KD_FINAL = 20;
+const float STEERING_KP_FINAL = 1.4;
+const float STEERING_KD_FINAL = 19;
 
 const float STEERING_ADJUST_LIMIT = 10.0;
 
@@ -122,8 +122,8 @@ uint8_t broadcastAddress[] = { 0xEC, 0xDA, 0x3B, 0x51, 0xA5, 0x84 }; // RECEIVER
 
 //**************************************************MOUSE CONFIG****************************************************************************
 
-const int FULL_CELL = 180; //in mm
-const int HALF_CELL = 90;
+const int FULL_CELL = 192; //in mm
+const int HALF_CELL = 96;
 const int INITIAL_OFFSET_FROM_CENTER = 0;
 const int STOP_DISTANCE = 60; // sum of the distance readings when mouse positioned centered in a cell before a front wall
 const int FORWARD_STOP_POSITION_FROM_WALL = 45;
@@ -143,6 +143,8 @@ const int OFFSET_90_SEARCH = -5; //-5
 const int SEARCH_SPEED= 500;
 const int FINAL_SPEED = 480;
 const int SEARCH_ACCELERATION = 1000;
+
+const int SEARCH_SPEED_SLOW = 300;
 
 const int FINAL_ACCERLERATION = 2000;
 const int SEARCH_EXIT_SPEED = 100;
@@ -171,9 +173,9 @@ const int BACKLIT_LED_PIN = 16;
 //***************************************************Maze*******************************************************************************
 
 
-#define TARGET Location(3,4)
-#define MAZE_WIDTH 7
-#define MAZE_HEIGHT 8
+#define TARGET Location(8,7)
+#define MAZE_WIDTH 16
+#define MAZE_HEIGHT 16
 #define MAZE_CELL_COUNT (MAZE_WIDTH * MAZE_HEIGHT)
 #define MAX_COST (MAZE_CELL_COUNT - 1)
 

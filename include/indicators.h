@@ -15,7 +15,7 @@ class Indicators
 public:
     void begin()
     {
-        
+        setToneChannel(2);
         pinMode(INDICATOR_PIN, OUTPUT);
     }
 

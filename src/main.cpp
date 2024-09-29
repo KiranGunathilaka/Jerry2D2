@@ -52,7 +52,7 @@ void setup()
                       motors.update(motion.velocity(), motion.omega(), sensors.get_steering_feedback());
                     });
 
-  indicators.customBlink_iter(400, 400, 5);
+  indicators.customBlink_iter(400, 400, 3);
   indicators.batteryLowIndicator();
 
   motion.reset_drive_system();
@@ -62,6 +62,9 @@ void loop()
 { 
   if (analog.switchRead() == 1) //fast search
   {
+    mouse.run_acc = SEARCH_ACCELERATION;
+    mouse.run_speed = SEARCH_SPEED;
+
     mouse.search_maze();
     nvs.saveArrays();
     indicators.customBlink_iter(300, 100, 5);
@@ -81,10 +84,13 @@ void loop()
     motors.fwdKd = FWD_KD_FINAL;
     motors.rotKp = ROT_KP_FINAL;
     motors.rotKd = FWD_KD_FINAL;
+
+    mouse.run_acc = FINAL_ACCERLERATION;
     mouse.run_speed = FINAL_SPEED;
 
     mouse.offset_180 = OFFSET_180_FINAL;
     mouse.offset_90 = OFFSET_90_FINAL;
+
     nvs.loadArrays();
     mouse.run_maze();
     indicators.backToBack();
@@ -94,7 +100,22 @@ void loop()
 
   else if (analog.switchRead() == 3)    //Slow final run;
   { 
-    mouse.run_speed = SEARCH_SPEED;
+    sensors.steering_kp = 0.9;
+    sensors.steering_kd = 14;
+
+    motors.maxMotorPercentage = MAX_MOTOR_PERCENTAGE;
+    motors.fwdKp = FWD_KP_SMALL;
+    motors.fwdKd = FWD_KD_SMALL;
+    motors.rotKp = ROT_KP_90;
+    motors.rotKd = ROT_KD_90;
+
+    mouse.offset_180 = -6;
+    mouse.offset_90 = -6;
+
+    mouse.run_speed = SEARCH_SPEED_SLOW;
+    mouse.run_acc = SEARCH_ACCELERATION;
+
+
     nvs.loadArrays();
     mouse.run_maze();
     indicators.backToBack();
@@ -102,6 +123,21 @@ void loop()
   }
   else if (analog.switchRead() == 4) //Slow search
   {
+    sensors.steering_kp = 0.9;
+    sensors.steering_kd = 14;
+
+    motors.maxMotorPercentage = MAX_MOTOR_PERCENTAGE;
+    motors.fwdKp = FWD_KP_SMALL;
+    motors.fwdKd = FWD_KD_SMALL;
+    motors.rotKp = ROT_KP_90;
+    motors.rotKd = ROT_KD_90;
+
+    mouse.offset_180 = -6;
+    mouse.offset_90 = -7;
+
+
+    mouse.run_speed = SEARCH_SPEED_SLOW;
+    mouse.run_acc = SEARCH_ACCELERATION;
 
     //adjust the parameters to match the slow parameters
     mouse.search_maze();
