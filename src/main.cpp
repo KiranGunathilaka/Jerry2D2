@@ -41,7 +41,6 @@ void setup()
   maze.initialise();
   mouse.init();
   indicators.begin();
-  // reporter.begin();
 
   // Set up a timer to call reporter.send() every 500ms (or any other interval)
   sendTicker.attach(0.0185, []()
@@ -51,7 +50,6 @@ void setup()
                       motion.update();
                       analog.batteryRead();
                       motors.update(motion.velocity(), motion.omega(), sensors.get_steering_feedback());
-                      // reporter.sendWalls();
                     });
 
   indicators.customBlink_iter(400, 400, 5);
@@ -61,34 +59,27 @@ void setup()
 }
 
 void loop()
-{
-
+{ 
   if (analog.switchRead() == 1)
   {
     mouse.search_maze();
     nvs.saveArrays();
-
     indicators.customBlink_iter(300, 100, 5);
-
     mouse.search_come_back();
-
     indicators.customBlink_iter(300, 100, 10);
-
     nvs.saveArrays();
   }
+
+
   else if (analog.switchRead() == 2)
   {
     nvs.loadArrays();
-
-    sensors.steering_kp = STEERING_KP_FINAL;
-    sensors.steering_kd = STEERING_KD_FINAL;
-
     mouse.run_maze();
-
     indicators.backToBack();
-
     mouse.run_come_back();
   }
+
+
   else if (analog.switchRead() == 3)
   {
     // Serial.println("3");

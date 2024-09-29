@@ -1,7 +1,6 @@
 // config.h
 //change this to robot configurations. 
 // we can have a nother maze config file also
-
 #pragma once
 #include "esp_system.h"
 
@@ -51,7 +50,7 @@ const float centerOffsetY = -2.08;
 const float RIGHT_DISTANCE_THRESHOLD = 95.0; //in mm
 const float LEFT_DISTANCE_THRESHOLD = 95.0; //in mm
 const float FRONT_THRESHOLD = 100.0; //in mm
-const float SIDE_DISTANCE = 55.0;
+const float SIDE_DISTANCE = 55.0; //55
 
 const float rightFrontSideAngle = 38.6;
 const float leftFrontSideAngle = 47.0;
@@ -74,6 +73,8 @@ const bool WIFI_ENABLE = true;
 //***************************************************MOTOR CONFIG***************************************************************************/
 //Left and Right Motor configurations
 const float MAX_MOTOR_PERCENTAGE = 90;
+const float MAX_MOTOR_PERCENTAGE_FINAL = 97;
+
 const int MIN_MOTOR_PERCENTAGE = 5; // when the given percentage is below this value, percentage is set to zero to damp oscillations
 const int MIN_MOTOR_BIAS = 10;// miinimum percentage that should be given for the motors to spin
 const int PWM_RESOLUTION_BITS = 8;
@@ -96,11 +97,11 @@ const int RIGHT_MOTOR_PWM = 13;
 #define MOTOR_LEFT_POLARITY (-1)
 #define MOTOR_RIGHT_POLARITY (1)
 
-//PD parameters  
-const float FWD_KP_ = 0.01;
-const float FWD_KD = 0.64;
-const float ROT_KP = 1.3;
-const float ROT_KD = 1.2;
+//PD parameters 
+const float FWD_KP_FINAL = 0.5;
+const float FWD_KD_FINAL = 0.9;
+const float ROT_KP_FINAL = 2.4;
+const float ROT_KD_FINAL = 0.9;
 
 const float FWD_KP_SMALL = 0.5;    
 const float FWD_KD_SMALL = 0.9;
@@ -108,11 +109,11 @@ const float FWD_KD_SMALL = 0.9;
 const float ROT_KP_90 = 2.4;   // measured for(90,360,0,3600)   @7.4V battery
 const float ROT_KD_90 = 0.5;
 
-const float STEERING_KP = 0.3;//0.1;
-const float STEERING_KD = 8;//1.5;
+const float STEERING_KP = 0.6;//0.3;
+const float STEERING_KD = 11;//8;
 
-const float STEERING_KP_FINAL = 0.9;
-const float STEERING_KD_FINAL = 15;
+const float STEERING_KP_FINAL = 1.3;
+const float STEERING_KD_FINAL = 20;
 
 const float STEERING_ADJUST_LIMIT = 10.0;
 
@@ -129,11 +130,21 @@ const int FORWARD_STOP_POSITION_FROM_WALL = 45;
 
 const int OMEGA_SPIN_TURN = 360;
 const int ALPHA_SPIN_TURN = 3600;
-const int SPIN_OFFSET = -5;   //degrees that should be added to 180 to get a 180 turn (without this robot turns about 200 degrees)
 
-const int SEARCH_SPEED= 500;//320;
-const int FINAL_SPEED = 460;
+const int OMEGA_FINAL_RUN = 720;
+const int ALPHA_FINAL_RUN = 7200;
+
+const int OFFSET_180_FINAL = -17;
+const int OFFSET_90_FINAL = -5;
+
+const int OFFSET_180_SEARCH = -5;  //-5 //degrees that should be added to 180 to get a 180 turn (without this robot turns about 200 degrees)
+const int OFFSET_90_SEARCH = -5; //-5
+ 
+const int SEARCH_SPEED= 300;//320;
+const int FINAL_SPEED = 300;
 const int SEARCH_ACCELERATION = 1000;
+
+const int FINAL_ACCERLERATION = 2000;
 const int SEARCH_EXIT_SPEED = 100;
 
 const int EXTRA_WALL_ADJUST = 12; //wall thickness
@@ -148,7 +159,6 @@ const int SWITCH_PIN = 15;
 const int BATTERY_PIN = 4;
 
 const float NOMINAL_BATTERY_V = 7.4;
-
 const int INDICATOR_PIN = 2;
 
 const int STARTING = 0;
