@@ -140,8 +140,8 @@ const int OFFSET_90_FINAL = -5;
 const int OFFSET_180_SEARCH = -5;  //-5 //degrees that should be added to 180 to get a 180 turn (without this robot turns about 200 degrees)
 const int OFFSET_90_SEARCH = -5; //-5
  
-const int SEARCH_SPEED= 300;//320;
-const int FINAL_SPEED = 300;
+const int SEARCH_SPEED= 500;
+const int FINAL_SPEED = 480;
 const int SEARCH_ACCELERATION = 1000;
 
 const int FINAL_ACCERLERATION = 2000;

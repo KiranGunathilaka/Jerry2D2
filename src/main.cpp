@@ -60,7 +60,7 @@ void setup()
 
 void loop()
 { 
-  if (analog.switchRead() == 1)
+  if (analog.switchRead() == 1) //fast search
   {
     mouse.search_maze();
     nvs.saveArrays();
@@ -71,8 +71,20 @@ void loop()
   }
 
 
-  else if (analog.switchRead() == 2)
+  else if (analog.switchRead() == 2)   //fast final run
   {
+    sensors.steering_kp = STEERING_KP_FINAL;
+    sensors.steering_kd = STEERING_KD_FINAL;
+
+    motors.maxMotorPercentage = MAX_MOTOR_PERCENTAGE_FINAL;
+    motors.fwdKp = FWD_KP_FINAL;
+    motors.fwdKd = FWD_KD_FINAL;
+    motors.rotKp = ROT_KP_FINAL;
+    motors.rotKd = FWD_KD_FINAL;
+    mouse.run_speed = FINAL_SPEED;
+
+    mouse.offset_180 = OFFSET_180_FINAL;
+    mouse.offset_90 = OFFSET_90_FINAL;
     nvs.loadArrays();
     mouse.run_maze();
     indicators.backToBack();
@@ -80,13 +92,24 @@ void loop()
   }
 
 
-  else if (analog.switchRead() == 3)
-  {
-    // Serial.println("3");
+  else if (analog.switchRead() == 3)    //Slow final run;
+  { 
+    mouse.run_speed = SEARCH_SPEED;
+    nvs.loadArrays();
+    mouse.run_maze();
+    indicators.backToBack();
+    mouse.run_come_back();
   }
-  else if (analog.switchRead() == 4)
+  else if (analog.switchRead() == 4) //Slow search
   {
-    // Serial.println("4");
+
+    //adjust the parameters to match the slow parameters
+    mouse.search_maze();
+    nvs.saveArrays();
+    indicators.customBlink_iter(300, 100, 5);
+    mouse.search_come_back();
+    indicators.customBlink_iter(300, 100, 10);
+    nvs.saveArrays();
   }
   else
   {

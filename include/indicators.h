@@ -15,6 +15,7 @@ class Indicators
 public:
     void begin()
     {
+        
         pinMode(INDICATOR_PIN, OUTPUT);
     }
 
