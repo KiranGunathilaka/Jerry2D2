@@ -10,6 +10,9 @@
 
 Buzzer buzzer(BUZZER_PIN, BACKLIT_LED_PIN);
 
+class Indicators;
+extern Indicators indicators;
+
 class Indicators
 {
 public:

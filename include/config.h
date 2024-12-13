@@ -50,7 +50,7 @@ const float centerOffsetY = -2.08;
 const float RIGHT_DISTANCE_THRESHOLD = 95.0; //in mm
 const float LEFT_DISTANCE_THRESHOLD = 95.0; //in mm
 const float FRONT_THRESHOLD = 100.0; //in mm
-const float SIDE_DISTANCE = 55.0; //55
+const float SIDE_DISTANCE = 65.0; //55
 
 const float rightFrontSideAngle = 38.6;
 const float leftFrontSideAngle = 47.0;
@@ -72,7 +72,7 @@ const bool WIFI_ENABLE = true;
 
 //***************************************************MOTOR CONFIG***************************************************************************/
 //Left and Right Motor configurations
-const float MAX_MOTOR_PERCENTAGE = 90;
+const float MAX_MOTOR_PERCENTAGE_SEARCH = 90;
 const float MAX_MOTOR_PERCENTAGE_FINAL = 97;
 
 const int MIN_MOTOR_PERCENTAGE = 5; // when the given percentage is below this value, percentage is set to zero to damp oscillations
@@ -82,7 +82,7 @@ const int PWM_RESOLUTION = 256; //2^8 use a suitable code to automate this
 const int PULSES_PER_ROTATION = 1430;
 
 const float MOTOR_BALANCE = 0;    //The Percentage fed into the left(add) and right(deduct) motors to math the motor performance 
-const int M_BALNCE_PWM = MAX_MOTOR_PERCENTAGE*PWM_RESOLUTION*MOTOR_BALANCE/10000;
+const int M_BALNCE_PWM = MAX_MOTOR_PERCENTAGE_SEARCH*PWM_RESOLUTION*MOTOR_BALANCE/10000;
 
 
 const int LEFT_MOTOR_PWM = 25;   //left is motor A
@@ -105,15 +105,22 @@ const float ROT_KD_FINAL = 0.9;
 
 const float FWD_KP_SMALL = 0.5;    
 const float FWD_KD_SMALL = 0.9;
-
 const float ROT_KP_90 = 2.4;   // measured for(90,360,0,3600)   @7.4V battery
 const float ROT_KD_90 = 0.5;
 
-const float STEERING_KP = 0.6;//0.3;
-const float STEERING_KD = 11;//8;
 
-const float STEERING_KP_FINAL = 1.4;
-const float STEERING_KD_FINAL = 19;
+
+const float STEERING_KP_SEARCH_FAST = 0.6;//0.3;
+const float STEERING_KD_SEARCH_FAST = 11;//8;
+
+const float STEERING_KP_FINAL_FAST = 0.9;
+const float STEERING_KD_FINAL_FAST = 18;
+
+const float STEERING_KP_SEARCH_SLOW = 1.4;//1.4
+const float STEERING_KD_SEARCH_SLOW = 18; //18
+
+const float STEERING_KP_FINAL_SLOW = 0.2; //0.3   9  good   - 0.25 14  somewhat oscillatory  0.2 9 - good but somewht osicallatory
+const float STEERING_KD_FINAL_SLOW = 13.5;
 
 const float STEERING_ADJUST_LIMIT = 10.0;
 
@@ -125,36 +132,46 @@ uint8_t broadcastAddress[] = { 0xEC, 0xDA, 0x3B, 0x51, 0xA5, 0x84 }; // RECEIVER
 const int FULL_CELL = 192; //in mm
 const int HALF_CELL = 96;
 const int INITIAL_OFFSET_FROM_CENTER = 0;
-const int STOP_DISTANCE = 60; // sum of the distance readings when mouse positioned centered in a cell before a front wall
-const int FORWARD_STOP_POSITION_FROM_WALL = 45;
+const int STOP_DISTANCE = 70; // sum of the distance readings when mouse positioned centered in a cell before a front wall
+const int FORWARD_STOP_POSITION_FROM_WALL = 55;
 
-const int OMEGA_SPIN_TURN = 360;
-const int ALPHA_SPIN_TURN = 3600;
+
+
+const int OMEGA_SEARCH_RUN = 360;
+const int ALPHA_SEARCH_RUN = 3600;
 
 const int OMEGA_FINAL_RUN = 720;
 const int ALPHA_FINAL_RUN = 7200;
 
-const int OFFSET_180_FINAL = -17;
-const int OFFSET_90_FINAL = -5;
 
-const int OFFSET_180_SEARCH = -5;  //-5 //degrees that should be added to 180 to get a 180 turn (without this robot turns about 200 degrees)
-const int OFFSET_90_SEARCH = -5; //-5
- 
-const int SEARCH_SPEED= 500;
-const int FINAL_SPEED = 480;
-const int SEARCH_ACCELERATION = 1000;
+
+const int OFFSET_180_SEARCH = -17;  //Don't need another two pairs for fast and slow as Rot speed maintained same
+const int OFFSET_90_SEARCH = -9; 
+
+const int OFFSET_180_FINAL = -17;
+const int OFFSET_90_FINAL = -10;
+
+
+
 
 const int SEARCH_SPEED_SLOW = 300;
+const int SEARCH_ACCELERATION_SLOW = 1000;
 
-const int FINAL_ACCERLERATION = 2000;
+const int SEARCH_SPEED_FAST= 500;
+const int SEARCH_ACCELERATION_FAST = 1000;
+
+
+const int FINAL_SPEED_SLOW = 350;
+const int FINAL_ACCERLERATION_SLOW = 1000;
+
+const int FINAL_SPEED_FAST = 480;
+const int FINAL_ACCERLERATION_FAST = 2000;
+
+
+
 const int SEARCH_EXIT_SPEED = 100;
 
 const int EXTRA_WALL_ADJUST = 12; //wall thickness
-
-const int ERROR_CORRECTION_OMEGA = 100;
-const int ERROR_CORRECTION_ALPHA = 1000;
-
-const int BACK_WALL_TO_CENTER = 0; //distance that need to be travelled to go to the center when robot is against the backwall
 
 //***************************************************Switches/Battery/Indicators******************************************************************************
 const int SWITCH_PIN = 15;
@@ -173,11 +190,11 @@ const int BACKLIT_LED_PIN = 16;
 //***************************************************Maze*******************************************************************************
 
 
-#define TARGET Location(8,7)
+#define TARGET Location(7,7)
 #define MAZE_WIDTH 16
 #define MAZE_HEIGHT 16
 #define MAZE_CELL_COUNT (MAZE_WIDTH * MAZE_HEIGHT)
 #define MAX_COST (MAZE_CELL_COUNT - 1)
 
-#define STACK_SIZE 256
-#define QUEUE_SIZE 256
+#define STACK_SIZE 1024
+#define QUEUE_SIZE 1024

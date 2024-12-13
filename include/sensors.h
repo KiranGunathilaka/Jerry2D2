@@ -23,8 +23,8 @@ class Sensors
 public:
     uint8_t g_steering_mode = STEER_NORMAL;
 
-    float steering_kp = STEERING_KP;
-    float steering_kd = STEERING_KD;
+    float steering_kp = STEERING_KP_SEARCH_FAST;
+    float steering_kd = STEERING_KD_SEARCH_FAST;
 
     volatile bool frontWallExist;
     volatile bool leftWallExist;

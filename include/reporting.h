@@ -75,25 +75,30 @@ public:
             Serial.print("FWD KP  ");
             motors.fwdKp = instance->command.fwdKp;
             Serial.print(motors.fwdKp);
+
             Serial.print("  FWD KD  ");
-            Serial.print(motors.fwdKd);
             motors.fwdKd = instance->command.fwdKd;
+            Serial.print(motors.fwdKd);
+
             Serial.print("  ROT KP  ");
-            Serial.print(motors.rotKp);
             motors.rotKp = instance->command.rotKp;
+            Serial.print(motors.rotKp);
+
             Serial.print("  ROT KD  ");
-            Serial.print(motors.rotKd);
             motors.rotKd = instance->command.rotKd;
+            Serial.print(motors.rotKd);
 
-            // Serial.print("Steer KP  ");
-            // Serial.print(sensors.tempKp);
-            // sensors.tempKp = instance->command.steeringKp;
-            // Serial.print("  steer KD  ");
-            // Serial.print(sensors.tempKd);
-            // sensors.tempKd = instance->command.steeringKd;
+            Serial.print("Steer KP  ");
+            sensors.steering_kp = instance->command.steeringKp;
+            Serial.print(sensors.steering_kp);
+            
+            Serial.print("  steer KD  ");
+            sensors.steering_kd = instance->command.steeringKd;
+            Serial.print(sensors.steering_kd);
+            
 
-            instance->speed = instance->command.speed;
-            instance->omega = instance->command.omega;
+            // instance->speed = instance->command.speed;
+            // instance->omega = instance->command.omega;
         }
     }
 
