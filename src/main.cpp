@@ -49,10 +49,10 @@ void setup()
   sendTicker.attach(0.0185, []()
                     {
                       encoders.update();
-                      //sensors.update();
-                      //motion.update();
+                      sensors.update();
+                      motion.update();
                       analog.batteryRead();
-                      //motors.update(motion.velocity(), motion.omega(), sensors.get_steering_feedback());
+                      motors.update(motion.velocity(), motion.omega(), sensors.get_steering_feedback());
                        });
 
   indicators.customBlink_iter(400, 400, 2);
@@ -62,7 +62,7 @@ void setup()
 
   motion.reset_drive_system();
 
-  calibrate.runMotorCalibration();
+  //calibrate.runMotorCalibration();
 }
 
 void setParameters(int runAcc, int runSpeed, float strKp, float strKd,
@@ -88,6 +88,12 @@ void setParameters(int runAcc, int runSpeed, float strKp, float strKd,
 
 void loop()
 {
+  // motion.reset_drive_system();
+  // motion.start_move(1000, SEARCH_SPEED_FAST, 0, SEARCH_ACCELERATION_SLOW);
+  // while (!motion.move_finished())
+  //       {
+  //           delayMicroseconds(loopTime);
+  //       }
 
   if (analog.switchRead() == 1) // fast search
   {

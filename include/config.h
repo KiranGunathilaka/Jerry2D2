@@ -56,9 +56,10 @@ const float rightFrontSideAngle = 38.6;
 const float leftFrontSideAngle = 47.0;
 //**************************************************MOUSE CONFIG**************************************************************************
 const int wheelDiameter = 32; //in mm
-const int MOUSE_RADIUS =  WHEEL_GAP/2;
+
 const int RADIANS_PER_DEGREE = 3.14/180;
 const float WHEEL_GAP = 108; // distance between the wheels in mm
+const int MOUSE_RADIUS =  WHEEL_GAP/2;
 
 const float MM_PER_ROTATION = 103.67; //  pi*wheel diameter .......d=33mm
 const float DEG_PER_MM_DIFFERENCE = 180.0/(2 * MOUSE_RADIUS * PI);
@@ -75,7 +76,7 @@ const bool WIFI_ENABLE = true;
 const float MAX_MOTOR_PERCENTAGE_SEARCH = 90;
 const float MAX_MOTOR_PERCENTAGE_FINAL = 100;
 
-const int MIN_MOTOR_PERCENTAGE = 5; // when the given percentage is below this value, percentage is set to zero to damp oscillations
+const int MIN_MOTOR_PERCENTAGE = 5.5; // when the given percentage is below this value, percentage is set to zero to damp oscillations
 const int MIN_MOTOR_BIAS = 10;// miinimum percentage that should be given for the motors to spin
 const int PWM_RESOLUTION_BITS = 8;
 const int PWM_RESOLUTION = 256; //2^8 use a suitable code to automate this
@@ -177,7 +178,7 @@ const int EXTRA_WALL_ADJUST = 12; //wall thickness
 const int SWITCH_PIN = 15;
 const int BATTERY_PIN = 4;
 
-const float NOMINAL_BATTERY_V = 7.4;
+const float NOMINAL_BATTERY_V = 8.0;//7.4; here we found motor functions at 8.0V
 const int INDICATOR_PIN = 2;
 
 const int STARTING = 0;
