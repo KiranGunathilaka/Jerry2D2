@@ -11,6 +11,7 @@
 #include "analog.h"
 #include "nvs.h"
 #include "indicators.h"
+#include "calibarate.h"
 
 Encoders encoders;
 Motors motors;
@@ -24,6 +25,7 @@ Maze maze;
 Analog analog;
 NVS nvs;
 Indicators indicators;
+Calibaration calibrate;
 
 Reporting *Reporting::instance = nullptr; // Initialize the static member
 
@@ -47,15 +49,20 @@ void setup()
   sendTicker.attach(0.0185, []()
                     {
                       encoders.update();
-                      sensors.update();
-                      motion.update();
+                      //sensors.update();
+                      //motion.update();
                       analog.batteryRead();
-                      motors.update(motion.velocity(), motion.omega(), sensors.get_steering_feedback()); });
+                      //motors.update(motion.velocity(), motion.omega(), sensors.get_steering_feedback());
+                       });
 
   indicators.customBlink_iter(400, 400, 2);
   indicators.batteryLowIndicator();
 
+  //Serial.print(analog.batteryRead());
+
   motion.reset_drive_system();
+
+  calibrate.runMotorCalibration();
 }
 
 void setParameters(int runAcc, int runSpeed, float strKp, float strKd,
