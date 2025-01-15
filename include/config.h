@@ -36,6 +36,9 @@ const int ToF_XSHUT_Left = 19;
 #define TOF_CENTER_ADD 0x31
 #define TOF_LEFT_ADD 0x32
 
+#define BUTTON_PIN 0
+#define LED_PIN 2
+
 const float g = 9.80665; //ms^-1
 const float gyroSensitivity = 0.0175; //for dps
 const float accelSensitivity = 0.000122; //for g
@@ -65,11 +68,12 @@ const float MM_PER_ROTATION = 103.67; //  pi*wheel diameter .......d=33mm
 const float DEG_PER_MM_DIFFERENCE = 180.0/(2 * MOUSE_RADIUS * PI);
 
 //*****************************************************COMMUNICATIONS************************************************************************
-const char* SSID ="Chocolate";
-const char* WIFI_PASSWORD = "Pissu69pusa";
-const char* HOST_IP = "192.168.8.131"; //IP of host computer
-const int HOST_PORT = 1234;  // Port number on the PC
+const char* SSID = "SLT-4G_WataNandun";//"SLT-ADSL-92776";//   // network credentials
+const char* PASSWORD = "Nwata@#com";//"J1234567890";//
+const int LOCAL_PORT = 12345;  // UDP port to listen on
 const bool WIFI_ENABLE = true;
+const char* REMOTE_IP = "192.168.1.131";
+const int REMOTE_PORT = 3333;
 
 //***************************************************MOTOR CONFIG***************************************************************************/
 //Left and Right Motor configurations
@@ -170,7 +174,7 @@ const int FINAL_ACCERLERATION_FAST = 2000;
 
 
 
-const int SEARCH_EXIT_SPEED = 100;
+const int SEARCH_EXIT_SPEED = 0;
 
 const int EXTRA_WALL_ADJUST = 12; //wall thickness
 
