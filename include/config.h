@@ -80,7 +80,7 @@ const int REMOTE_PORT = 3333;
 const float MAX_MOTOR_PERCENTAGE_SEARCH = 90;
 const float MAX_MOTOR_PERCENTAGE_FINAL = 100;
 
-const int MIN_MOTOR_PERCENTAGE = 5.5; // when the given percentage is below this value, percentage is set to zero to damp oscillations
+const int MIN_MOTOR_PERCENTAGE = 5; // when the given percentage is below this value, percentage is set to zero to damp oscillations
 const int MIN_MOTOR_BIAS = 10;// miinimum percentage that should be given for the motors to spin
 const int PWM_RESOLUTION_BITS = 8;
 const int PWM_RESOLUTION = 256; //2^8 use a suitable code to automate this
