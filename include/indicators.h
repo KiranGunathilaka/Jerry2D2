@@ -10,11 +10,15 @@
 
 Buzzer buzzer(BUZZER_PIN, BACKLIT_LED_PIN);
 
+class Indicators;
+extern Indicators indicators;
+
 class Indicators
 {
 public:
     void begin()
     {
+        setToneChannel(2);
         pinMode(INDICATOR_PIN, OUTPUT);
     }
 

@@ -108,10 +108,9 @@ void setup() {
   command.fwdKd = 1.3;
   command.rotKp = 1.3;
   command.rotKd = 1.2;
-  command.speed = 250;
-  command.omega = 0;
   command.steeringKp = 1.5;
   command.steeringKd = 2;
+
   // Send message via ESP-NOW
   delay(1000);
   esp_now_send(broadcastAddress, (uint8_t *)&command, sizeof(command));
