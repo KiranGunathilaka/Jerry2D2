@@ -52,49 +52,123 @@ void setup()
   sendTicker.attach(0.0185, []()
                     {
                       encoders.update();
+                      communications.send_velocity();
+
+                      communications.send(String(motion.angle()) + "  " + String(motion.position()));
+
                       sensors.update();
                       motion.update();
                       
                       //analog.batteryRead();
                       motors.update(motion.velocity(), motion.omega(), sensors.get_steering_feedback());
-                      communications.send_velocity();
-                      communications.check(); 
-                       });
+                      
+                      communications.check(); });
 
-  //indicators.customBlink_iter(400, 400, 2);
-  //indicators.batteryLowIndicator();
+  // indicators.customBlink_iter(400, 400, 2);
+  // indicators.batteryLowIndicator();
 
-  //Serial.print(analog.batteryRead());
+  // Serial.print(analog.batteryRead());
 
   motion.reset_drive_system();
 
-  //calibrate.runMotorCalibration();
+  // calibrate.runMotorCalibration();
 }
 
+void setParameters(int runAcc, int runSpeed, float strKp, float strKd,
+                   float off90, float off180, float fwdKp, float fwdKd, float rotKp, float rotKd,
+                   float mmp = MAX_MOTOR_PERCENTAGE_FINAL)
+{
+  mouse.run_acc = runAcc;
+  mouse.run_speed = runSpeed;
 
+  sensors.steering_kp = strKp;
+  sensors.steering_kd = strKd;
+
+  motors.fwdKp = fwdKp;
+  motors.fwdKd = fwdKd;
+  motors.rotKp = rotKp;
+  motors.rotKd = rotKd;
+
+  mouse.offset_90 = off90;
+  mouse.offset_180 = off180;
+
+  motors.maxMotorPercentage = mmp;
+}
 
 void loop()
-{
+{  setParameters(SEARCH_ACCELERATION_SLOW, SEARCH_SPEED_SLOW, STEERING_KP_SEARCH_SLOW, STEERING_KD_SEARCH_SLOW,
+                OFFSET_90_SEARCH, OFFSET_180_SEARCH, FWD_KP_SMALL, FWD_KD_SMALL, ROT_KP_90,
+                ROT_KD_90, MAX_MOTOR_PERCENTAGE_SEARCH);
+
+
+  // while (true)
+  // {
+
+
+    // mouse.from_cell_to_cell();
+    // motion.reset_drive_system();
+    // delay(2000);
+    // mouse.turn_180();
+    // motion.reset_drive_system();
+    // delay(400);
+    // mouse.from_cell_to_cell();
+    // motion.reset_drive_system();
+    // delay(2000);
+    // mouse.turn_180();
+    // motion.reset_drive_system();
+    // delay(400);}
+    
   //sensors.wait_till_button();
-  delay(6000);
-  while (true)
-  {
-    mouse.move(1,100);
-    mouse.move(192/2, 200);
-    mouse.turn(-45,180);
-    mouse.move(408, 200);
-    mouse.turn(-90,180);
-    mouse.move(408, 200);
-    mouse.turn(-135,180);
-    mouse.move(500, 200);
+  mouse.move(0.5, 200);
+  Serial.println("maze start");
+  setParameters(SEARCH_ACCELERATION_SLOW, SEARCH_SPEED_SLOW, STEERING_KP_SEARCH_SLOW, STEERING_KD_SEARCH_SLOW,
+                OFFSET_90_SEARCH, OFFSET_180_SEARCH, FWD_KP_SMALL, FWD_KD_SMALL, ROT_KP_90,
+                ROT_KD_90, MAX_MOTOR_PERCENTAGE_SEARCH);
 
+  mouse.search_maze();
+  mouse.search_come_back();
 
-  }
+  // sensors.wait_till_button();
+  delay(3000);
+
+  mouse.stop_distance = 75.0;
+  mouse.absolute_stop = 60.0;
+
+  setParameters(FINAL_ACCERLERATION_FAST, FINAL_SPEED_FAST, STEERING_KP_FINAL_FAST, STEERING_KD_FINAL_FAST,
+                OFFSET_90_FINAL, OFFSET_180_FINAL, FWD_KP_FINAL, FWD_KD_FINAL, ROT_KP_FINAL,
+                ROT_KD_FINAL, MAX_MOTOR_PERCENTAGE_FINAL);
+
+  nvs.loadArrays();
+  mouse.run_maze();
+
+  mouse.run_come_back();
+
   while (true)
   {
     indicators.customBlink_iter(400, 400, 5);
   }
 }
+
+  // delay(6000);
+  // while (true)
+  // {
+  //   mouse.move(FULL_CELL, 200);
+  //   delay(500);
+  //   mouse.move(FULL_CELL, 200);
+  //   delay(500);
+  //   mouse.turn(90,360);
+  //   delay(500);
+  //   mouse.turn(-90,360);
+  //   delay(500);
+  //   mouse.move(-FULL_CELL, 200);
+  //   delay(500);
+  //   mouse.move(-FULL_CELL, 200);
+  //   delay(500);
+  // }
+  // while (true)
+  // {
+  //   indicators.customBlink_iter(400, 400, 5);
+  // }
 
 
 //  if (analog.switchRead() == 1) // fast search
@@ -155,30 +229,3 @@ void loop()
 //   }
 
 //   motors.stop();
-
-
-
-
-
-
-
-// void setParameters(int runAcc, int runSpeed, float strKp, float strKd,
-//                    float off90, float off180, float fwdKp, float fwdKd, float rotKp, float rotKd,
-//                    float mmp = MAX_MOTOR_PERCENTAGE_FINAL)
-// {
-//   mouse.run_acc = runAcc;
-//   mouse.run_speed = runSpeed;
-
-//   sensors.steering_kp = strKp;
-//   sensors.steering_kd = strKd;
-
-//   motors.fwdKp = fwdKp;
-//   motors.fwdKd = fwdKd;
-//   motors.rotKp = rotKp;
-//   motors.rotKd = rotKd;
-
-//   mouse.offset_90 = off90;
-//   mouse.offset_180 = off180;
-
-//   motors.maxMotorPercentage = mmp;
-// }

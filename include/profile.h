@@ -176,7 +176,7 @@ public:
                 m_state = PS_BRAKING;
                 if (m_final_speed == 0)
                 {
-                    m_target_speed = m_sign * 30.0f; // magic number to make sure we reach zero
+                    m_target_speed = m_sign * 0.0f; // magic number to make sure we reach zero
                 }
                 else
                 {

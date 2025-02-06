@@ -284,10 +284,16 @@ void send_velocity() {
         return ;
     }
     String message = "VELOCITY:" 
-                    + String(motion.velocity())+","
+                    +String(motors.getLeftPercentage())+","//motion.velocity()
                     +String(encoders.robot_speed())+","
-                    +String(motion.omega())+","
-                    +String(encoders.robot_omega());
+                    +String(motors.getRightPercentage())+"," //motion.omega()
+                    +String(encoders.robot_omega()) + ","
+                    
+                    
+                    +String(motors.getLeftSpeed()) + ","
+                    +String(motors.getRightSpeed()) + ","
+                    +String(encoders.leftSpeed()) + ","
+                    +String(encoders.rightSpeed());
     udp.beginPacket(REMOTE_IP, REMOTE_PORT);
     udp.printf(message.c_str());
     udp.endPacket();

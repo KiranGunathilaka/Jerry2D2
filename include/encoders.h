@@ -216,6 +216,16 @@ public:
         return rps;
     }
 
+    inline float leftSpeed(){
+        float spd;
+
+        noInterrupts();
+        spd = ((float)left_delta  * MM_PER_ROTATION/ (PULSES_PER_ROTATION *time_change_u))*1000000; //encoderCounterLeft * 
+        interrupts();
+
+        return spd;
+    }
+
     inline int rightRPS(){
         int rps;
 
@@ -224,6 +234,16 @@ public:
         interrupts();
 
         return rps;
+    }
+
+    inline float rightSpeed(){
+        float spd;
+
+        noInterrupts();
+        spd = ((float)right_delta  * MM_PER_ROTATION/ (PULSES_PER_ROTATION *time_change_u))*1000000; //encoderCounterLeft * 
+        interrupts();
+
+        return spd;
     }
 
 

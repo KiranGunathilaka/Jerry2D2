@@ -44,7 +44,7 @@ const float gyroSensitivity = 0.0175; //for dps
 const float accelSensitivity = 0.000122; //for g
 const float accelScaleFact = 0.0011964; // g*accelSensitivity
 
-const float radToDeg = 57.296;
+const float radToDeg = 180/PI;
 const float scaleY = 43.44; // these are the primary axis lengths of the ellipse that got from plotting x y magnetic field intensity values
 const float scaleX = 46.44;  //for more detyails see the calibaration code on the Arduino codes folder
 const float centerOffsetX = 20.91;
@@ -58,13 +58,13 @@ const float SIDE_DISTANCE = 65.0; //55
 const float rightFrontSideAngle = 38.6;
 const float leftFrontSideAngle = 47.0;
 //**************************************************MOUSE CONFIG**************************************************************************
-const int wheelDiameter = 32; //in mm
+const int wheelDiameter = 34; //in mm
 
-const int RADIANS_PER_DEGREE = 3.14/180;
-const float WHEEL_GAP = 108; // distance between the wheels in mm
-const int MOUSE_RADIUS =  WHEEL_GAP/2;
+const float RADIANS_PER_DEGREE = PI/180;
+const float WHEEL_GAP = 101; // distance between the wheels in mm
+const float MOUSE_RADIUS =  WHEEL_GAP/2;
 
-const float MM_PER_ROTATION = 103.67; //  pi*wheel diameter .......d=33mm
+const float MM_PER_ROTATION = PI*wheelDiameter; //  pi*wheel diameter .......d=34mm
 const float DEG_PER_MM_DIFFERENCE = 180.0/(2 * MOUSE_RADIUS * PI);
 
 //*****************************************************COMMUNICATIONS************************************************************************
@@ -72,8 +72,8 @@ const char* SSID = "SLT-4G_WataNandun";//"SLT-ADSL-92776";//   // network creden
 const char* PASSWORD = "Nwata@#com";//"J1234567890";//
 const int LOCAL_PORT = 12345;  // UDP port to listen on
 const bool WIFI_ENABLE = true;
-const char* REMOTE_IP = "192.168.1.131";
-const int REMOTE_PORT = 3333;
+const char* REMOTE_IP = "192.168.1.157";
+const int REMOTE_PORT = 5005;
 
 //***************************************************MOTOR CONFIG***************************************************************************/
 //Left and Right Motor configurations
@@ -84,7 +84,7 @@ const int MIN_MOTOR_PERCENTAGE = 5; // when the given percentage is below this v
 const int MIN_MOTOR_BIAS = 10;// miinimum percentage that should be given for the motors to spin
 const int PWM_RESOLUTION_BITS = 8;
 const int PWM_RESOLUTION = 256; //2^8 use a suitable code to automate this
-const int PULSES_PER_ROTATION = 1430;
+const int PULSES_PER_ROTATION = 1470;//1430
 
 const float MOTOR_BALANCE = 0;    //The Percentage fed into the left(add) and right(deduct) motors to math the motor performance 
 const int M_BALNCE_PWM = MAX_MOTOR_PERCENTAGE_SEARCH*PWM_RESOLUTION*MOTOR_BALANCE/10000;
@@ -196,8 +196,8 @@ const int BACKLIT_LED_PIN = 16;
 
 
 #define TARGET Location(7,7)
-#define MAZE_WIDTH 16
-#define MAZE_HEIGHT 16
+#define MAZE_WIDTH 8
+#define MAZE_HEIGHT 8
 #define MAZE_CELL_COUNT (MAZE_WIDTH * MAZE_HEIGHT)
 #define MAX_COST (MAZE_CELL_COUNT - 1)
 
