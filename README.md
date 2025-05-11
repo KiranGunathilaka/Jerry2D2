@@ -1,6 +1,6 @@
 # 🐭 Micromouse Robot Project
 
-This project showcases a compact, high-performance Micromouse robot built with minimal components and smart design choices. Despite its DIY aesthetic, the robot achieved **first place in two Micromouse competitions**, demonstrating robust navigation, efficient path planning, and reliable hardware integration.
+This project showcases a compact, high-performance Micromouse robot built with minimal components and smart design choices. Despite its DIY aesthetic, the robot wins **more than 3 competitions**, demonstrating robust navigation, efficient path planning, and reliable hardware integration.
 
 ---
 
@@ -23,7 +23,7 @@ Our goal was to design a lightweight, cost-effective Micromouse robot capable of
 ## 🛠️ Hardware Design
 
 - All components were **hand-soldered onto two stacked dot boards**, creating a modular and space-efficient layout.
-- Although the ESP32 includes built-in **IMU and magnetometer**, we opted not to use them, relying solely on ToF sensors for simplicity and performance.
+- Although the ESP32 ,IMU and 3 TOF sensors.
 - The robot’s compact form factor contributed to its maneuverability and consistent speed in maze runs.
 
 ---
@@ -42,12 +42,7 @@ Through this project, we developed and refined skills in:
 
 ## 🏆 Achievements
 
-This robot **won first place in two Micromouse competitions**, where it was recognized for its:
-- Efficient navigation strategy
-- Quick acceleration and tight cornering
-- Minimalist yet effective hardware design
 
----
 
 
 
