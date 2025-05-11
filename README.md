@@ -46,9 +46,9 @@ Through this project, we developed and refined skills in:
 
 
 
-| Competition Victory #1 | Competition Victory #2 |Competition Victory #2 |
+| MicroMaze Organized By IIT| Robogames 2024 Organized By SLIIT |Jerry2D2 V 1.0 |
 |------------------------|------------------------|------------------------|
-| ![Victory 1](./images/victory1.jpg) | ![Victory 2](./images/victory2.jpg) |![Victory 2](./images/victory2.jpg) |
+| ![Victory 1](./Assets/micromaze.jpg) | ![Victory 2](./Assets/robogames.jpg) |![Victory 2](./Assets/bot.jpg) |
 
 
 
