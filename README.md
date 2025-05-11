@@ -23,7 +23,7 @@ Our goal was to design a lightweight, cost-effective Micromouse robot capable of
 ## 🛠️ Hardware Design
 
 - All components were **hand-soldered onto two stacked dot boards**, creating a modular and space-efficient layout.
-- Although the ESP32 ,IMU and 3 TOF sensors.
+- We used ESP32 ,IMU and 3 TOF sensors.
 - The robot’s compact form factor contributed to its maneuverability and consistent speed in maze runs.
 
 ---
