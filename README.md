@@ -51,4 +51,8 @@ Through this project, we developed and refined skills in:
 | ![Victory 1](./Assets/micromaze.jpg) | ![Victory 2](./Assets/robogames.jpg) |![Victory 2](./Assets/bot.jpg) |
 
 
+### Disclaimer
+The complete code is not included in this repository. The 60% of code currently available here is sourced from existing open-source projects. 
+
+
 
