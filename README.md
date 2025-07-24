@@ -19,6 +19,11 @@ Our goal was to design a lightweight, cost-effective Micromouse robot capable of
 - **Power**: Rechargeable battery pack providing stable voltage for extended runs.
 
 ---
+## 🧠 Profiling
+
+![Image 1](images/1.jpg)
+![Image 2](images/3.jpg)
+
 
 ## 🛠️ Hardware Design
 
