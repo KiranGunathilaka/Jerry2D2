@@ -21,8 +21,8 @@ Our goal was to design a lightweight, cost-effective Micromouse robot capable of
 ---
 ## 🧠 Profiling
 
-![Image 1](images/1.jpg)
-![Image 2](images/3.jpg)
+![Image 1](Assets/1.jpg)
+![Image 2](Assets/3.jpg)
 
 
 ## 🛠️ Hardware Design
